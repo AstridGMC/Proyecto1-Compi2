@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/estiloPesta;as.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="./css/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<span class="glyphicon glyphicon-search"></span>
+<body style="background-color: #D9FFF9">
+    <object type="text/html" data="portada.html" width="100%" height="350" name="contenido"></object>
+    <div style="padding-top:0px;">
+        <div class="header"></div>
+        <div style="width: 100%; padding-top: 20px;">
+            <div style="width:48%; padding-left: 5%; float:left;">
+
+                <button type="submit"><img src="delete.gif" alt="x" />Eliminar</button>
+
+                <h2 style="background-color: rgb(8, 49, 68); color:white">Entrada</h2>
+                <textarea style="width: 100%; height: 400px; font-size: 20px;" id="editor" >
+                </textarea>
+            </div>
+            <div style="width:48%; padding-right: 5%; float:right;">
+                <h2 style="background-color: rgb(8, 49, 68); color:rgb(184, 230, 236)">Salida</h2>
+                <textarea  style="width: 100%; height: 400px; font-size: 20px;" id="consola" readonly>
+                </textarea>
+            </div>
+        </div> 
+    </div>
+   
+   <div>
+       <br>
+   </div>
+
+   <div style = "padding-left: 40%; align-content: center;">
+    <button type = "button" class = "btn btn-primary btn-lg" id = "enviar"> Analizar </button>
+    <button type = "button" class = "btn btn-primary btn-lg" onclick = "" id = "VER VARIABLES"> ver </button>
+  </div>
+
+  <div id="editor">function foo(items) {
+    var x = "All this is syntax highlighted";
+    return x;
+}</div>
+
+</body>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="../script/InsertarArchivo.js"> </script>
+<script src="../script/scriptPest.js"></script>
+
+<script src="./public/ace/ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.session.setMode("ace/mode/javascript");
+</script>
+<script>
+    $(document).ready(function () {
+      $('.header').load('./portada.html');
+    });
+  </script>
+</html>
