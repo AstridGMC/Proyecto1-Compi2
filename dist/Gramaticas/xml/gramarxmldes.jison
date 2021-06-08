@@ -30,6 +30,13 @@
 "\""			return 'comilla';
 "'"				return 'apostrofe';
 "!"				return 'inicoment';
+"?"				return 'c_interroga';
+"xml" 			return 'xml';
+"version"		return 'version';
+"encoding"		return 'encoding';
+"UTF-8"			return 'UTF'
+"ASCII"			return 'ASCII';
+"ISO859-1"		return 'ISO';
 
 "+"                 return 'mas';
 "-"                 return 'menos';
@@ -60,13 +67,16 @@
 
 %% /* Definición de la gramática */
 XML_GRAMAR :  
-	ABRIR_ELEMENTO CONTENIDO_ELEMENTO EOF	 {return $1;}
-;
-
-ELEMENTOS : ELEMENTO E_PRIMA 
+	ENCABEZADO ABRIR_ELEMENTO CONTENIDO_ELEMENTO EOF	 {return $1;}
 	| error { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
 ;
-E_PRIMA : ELEMENTO E_PRIMA	| ;
+
+/*    <?xml version="1.0" encoding="UTF-8"?>    */
+ENCABEZADO : 
+	menosque c_interroga xml version igual QUOTES TIPO_DATO QUOTES encoding igual QUOTES FORMAT QUOTES c_interroga masque 
+;
+
+FORMAT : UTF | ASCII | ISO ;
 
 ELEMENTO :  
 	ABRIR_ELEMENTO 	CONTENIDO_ELEMENTO 
@@ -102,9 +112,14 @@ CIERRE_ELEMENTO :
 	| div masque 
 ;
 
-L_ELEMENTOS : ELEMENTO L_E_PRIMA ;
-L_E_PRIMA : ELEMENTO L_E_PRIMA | ;
+L_ELEMENTOS : L_ELEMENTOS ELEMENTO
+	|ELEMENTO ;
 
+/*
+L_ELEMENTOS : ELEMENTO L_E_PRIMA ;
+L_E_PRIMA : ELEMENTO L_E_PRIMA | ; */
+
+/**/
 
 CONTENIDO_ETIQUETA : TIPOCONTENIDO C_E_PRIMA;
 C_E_PRIMA : TIPOCONTENIDO C_E_PRIMA  |  ;
@@ -115,6 +130,7 @@ TIPOCONTENIDO :
 
 
 TIPO_DATO : identificador|decimal|entero;
+
 SIGNOS : mas | menos | por | div ;
 
 QUOTES : comilla | apostrofe ;
