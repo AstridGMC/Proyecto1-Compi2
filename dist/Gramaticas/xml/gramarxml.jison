@@ -37,6 +37,13 @@
 "UTF-8"			return 'UTF'
 "ASCII"			return 'ASCII';
 "ISO859-1"		return 'ISO';
+"&lt;"			return 'lessthan';
+"&gt;"			return 'graterthan';
+"&amp;"			return 'ampersand';
+"&apos;"		return 'simplequote';
+"&quot;"		return 'doublequote';
+":"				return 'colon';
+"_"				return 'underscore';
 
 "+"                 return 'mas';
 "-"                 return 'menos';
@@ -50,7 +57,6 @@
 [0-9]+("."[0-9]+)?\b    return 'decimal';
 [0-9]+\b                return 'entero';
 ([a-zA-Z0-9])[a-zA-Z0-9_]* return 'identificador'; 
-[:|_]					return 'especialchars';
 
 <<EOF>>                 return 'EOF';
 
@@ -132,8 +138,10 @@ TIPO:
 	TIPOCONTENIDO | ELEMENTO ;	
 
 TIPOCONTENIDO :
-	TIPO_DATO|SIGNOS|especialchars;
+	TIPO_DATO | SIGNOS | SPECIALCHARS;
 
+SPECIALCHARS : 
+	lessthan|graterthan|ampersand|simplequote|doublequote|colon|underscore;
 
 TIPO_DATO : identificador|decimal|entero;
 
