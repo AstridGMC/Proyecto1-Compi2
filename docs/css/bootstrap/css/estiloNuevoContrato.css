@@ -1,0 +1,73 @@
+#divPrincipal{
+    font-size: 30px;
+    padding-right: 10%;
+}
+
+#titulo{
+    padding-left: auto;
+    padding-right: auto;
+}
+
+#nombres{
+    width: 50%;
+    display: inline-block;
+    float: right;
+}
+
+#apellidos{
+    width: 50%;
+    display: inline-block;
+    float: right;
+}
+
+#cui{
+    width: 50%;
+    display: inline-block;
+    float: right;
+}
+
+#telefono{
+    width: 50%;
+    display: inline-block;
+    float: right;
+}
+
+#divSegundo{
+    align-content: center;
+    width:100%;
+}
+
+#rangos{
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 20px;
+}
+
+#IGSS{
+    display: inline-block;
+    margin-left: 50px;
+}
+
+#IRTRA{
+    display: inline-block;
+    margin-left: 50px;
+}
+
+.input{ 
+    font-size: 30px;
+    display: inline-block;
+    margin-left: 40px;
+}
+
+#nuevaHab{
+    font-size: 30px;
+}
+
+#precioHabitacion{
+    margin-left: 5%;
+    font-size: 30px;
+}
+
+#costoHabitacion{
+    margin-left: 3.5%;
+}

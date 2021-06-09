@@ -1,0 +1,37 @@
+#titulo{
+    padding-left: 20%;
+    padding-right: auto;
+}
+
+#inferior{
+    font-size: 30px;
+}
+#nombres{
+    display: inline-block ;
+    margin-left: 15%;
+}
+
+#apellidos{
+    display: inline-block ;
+    margin-left: 15%;
+}
+#cui{
+    display: inline-block ;
+    margin-left: 22.5%;
+}
+#telefono{
+    display: inline-block ;
+    margin-left: 16%;
+}
+#correo{
+    display: inline-block ;
+    margin-left: 2%;
+}
+
+#boton{
+    width: 150px;
+    margin-left: 25%;
+    margin-right: auto;
+}
+
+
