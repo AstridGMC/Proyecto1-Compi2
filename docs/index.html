@@ -5,10 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link  rel = "stylesheet"  href = "./codemirror-5.61.1/lib/codemirror.css"> 
     <meta name="viewport" content="width= device-width">
     <link rel="stylesheet" href="./css/estiloBarra.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="./css/estiloheader.css" MEDIA=screen>
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script  src = "./codemirror-5.61.1/lib/codemirror.js" > </script> 
+    
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
@@ -69,19 +71,19 @@
 <section>
     <div style="padding-top:0px;">
         <div style="width: 100%; padding-top: 80px;">
-            <div style="width:48%; padding-left: 5%; float:left;">
+            <div style="width:48%; padding-left: 5%; float:left;height: 400px;">
 
-                <button class="btn btn-light btn_blue" id="abrir"><img src="./css/imagenes/subir.png" /> <a>Abrir <input
+                <button class="btn btn-light btn_blue" id="abrir1"><img src="./css/imagenes/subir.png" /> <a> <input
                             id="abrir" type="file" name="file" required></input></a></button>
                 <button class="btn btn-light btn_blue" type="button" onclick="limpiar()"><img
                         src="./css/imagenes/limpiar.png" /> Limpiar</button>
                 <button class="btn btn-light btn_blue" type="button" onclick=""><img src="./css/imagenes/nuevo.png" />
                     Nuevo</button>
-
+                <button class="btn btn-light btn_blue" type="button" onclick="guardarEntrada()"><img src="./css/imagenes/guardar.png" />
+                        Guardar</button>    
                 <h2 style="background-color: rgb(8, 49, 68); color:white; margin-top: 20px;">Entrada</h2>
 
-                <textarea style="width: 100%; height: 400px; font-size: 20px;" id="editor">
-                </textarea>
+                <textarea style="width: 100%; height: 400px; font-size: 20px;" id="editor"></textarea>
             </div>
             <div style="width:48%; padding-right: 5%; float:right;">
 
@@ -90,26 +92,29 @@
                 <button type="button" class="btn btn-light btn_blue" onclick=""><img src="./css/imagenes/desc.png" />
                     Analizar Descendente </button>
 
-                <h2 style="background-color: rgb(8, 49, 68); color:rgb(184, 230, 236); margin-top: 20px;">Consulta</h2>
-                <textarea style="width: 100%; height: 400px; font-size: 20px;" id="consola" readonly>
-
-                </textarea>
+                <h2 style="background-color: rgb(8, 49, 68); color:rgb(184, 230, 236); margin-top: 58px;">Consulta</h2>
+                <textarea style="width: 100%; height: 400px; font-size: 20px;" id="consola" ></textarea>
             </div>
         </div>
     </div>
 </section>
 <section>
-    <div style="padding-left: 20%; padding-right: 20%; align-content: center; margin-top: 100px;">
+    <div style="padding-left: 20%; padding-right: 20%; align-content: center;">
         
-        <h2 style="background-color: rgb(8, 49, 68); color:rgb(184, 230, 236); margin-top: 600px;">RESULTADO CONSULTA</h2>
-        <textarea style="width: 100%; height: 400px; font-size: 20px;" id="consola" readonly>
-
-        </textarea>
+        <h2 style="background-color: rgb(8, 49, 68); color:rgb(184, 230, 236); margin-top: 580px;">RESULTADO CONSULTA</h2>
+        <textarea class="consola_resultado"  id="resultado" readonly ></textarea>
+        <button class="btn btn-light btn_blue" type="button" onclick="guardarResultado()"><img src="./css/imagenes/guardar.png" />
+            Guardar Resultado</button>    
     </div>
 </section>
     
 
+
+
+<script  src = "./codemirror-5.61.1/mode/javascript/javascript.js" > </script>
+<script src = "http://code.jquery.com/jquery-3.0.0.min.js" > </script> 
 </body>
-<script src="./Scripts/InsertarArchivo.js"> </script>
+<script type="text/javascript" src="Scripts/InsertarArchivo.js"></script>
+
 
 </html>

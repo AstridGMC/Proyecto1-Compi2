@@ -15,7 +15,7 @@ header {
 .navbar1 {
   height: 60px;
   overflow: hidden;
-  background-color: #10242B;
+  background-color: rgb(2, 88, 119);
   font-family: Arial;
 }
 
@@ -111,4 +111,27 @@ h1{
 
 .dropdown-backdrop {
   position: static;
+}
+
+
+.consola_resultado{
+  width: 100%; 
+  height: 300px;color: 
+  white; font-size: 20px;
+    margin-bottom: 40px; 
+    background-color: black;
+}
+
+textarea{
+	width: 555px;
+	height: 270px;
+	font-size: 20px;
+	padding: 10px;
+	line-height: 30px;
+	border-radius: 3px;
+	border: 1px solid #aaaaaa;
+}
+
+#abrir1{
+  font-size: 13px;
 }
