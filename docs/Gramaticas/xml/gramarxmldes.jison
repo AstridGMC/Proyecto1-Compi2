@@ -84,10 +84,6 @@ ENCABEZADO :
 
 FORMAT : UTF | ASCII | ISO ;
 
-ELEMENTO :  
-	ABRIR_ELEMENTO 	CONTENIDO_ELEMENTO 
-;
-
 ABRIR_ELEMENTO : 
 	menosque identificador 
 	| menosque inicoment menos menos 
@@ -113,19 +109,18 @@ C_A_PRIMA :TIPOCONTENIDO C_A_PRIMA | ;
 
 CIERRE_ELEMENTO : 
 	masque CONTENIDO_ETIQUETA menosque div identificador masque 
-	| masque L_ELEMENTOS menosque div identificador masque 
+	| masque L_ELEMENTOS div identificador masque 
 	| masque menosque div identificador masque
 	| div masque 
 ;
 
-L_ELEMENTOS : L_ELEMENTOS ELEMENTO
-	|ELEMENTO ;
-
-/*
 L_ELEMENTOS : ELEMENTO L_E_PRIMA ;
-L_E_PRIMA : ELEMENTO L_E_PRIMA | ; */
+L_E_PRIMA : ELEMENTO L_E_PRIMA | menosque ; 
 
-/**/
+
+ELEMENTO :  
+	ABRIR_ELEMENTO 	CONTENIDO_ELEMENTO 
+;
 
 CONTENIDO_ETIQUETA : TIPOCONTENIDO C_E_PRIMA;
 C_E_PRIMA : TIPOCONTENIDO C_E_PRIMA  |  ;
