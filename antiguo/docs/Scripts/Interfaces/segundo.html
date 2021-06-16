@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Form Gestion</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+
+<body>
+    <h3>Ejemplo de formulario para diligenciar la gestion</h3>
+    <label class="" for="">Identificacion</label>
+    <input class="form-control" type="text" name="" value=""> **
+    <!--Este input es el que debe recibir el valor del otro input-->**
+    <select class="form-control" name="">
+        <option>Seleccione la consecuencia</option>
+        <option value="">Tipificacion #1 </option>
+        <option value="">Tipificacion #2 </option>
+        <option value="">Tipificacion #3 </option>
+        <option value="">Tipificacion #4 </option>
+        <option value="">Tipificacion #5 </option>
+    </select>
+    <textarea class="form-control" name="name" rows="8" cols="80" placeholder="Observaciones"></textarea>
+    <a class="btn btn-default" href="#" role="button" onclick='window.close();'>Guardar y cerrar</a>
+
+    <input type="text" id="aqui">
+    <script type="text/javascript">
+        var url_string = window.location.href; //
+        var url = new URL(url_string);
+        var c = url.searchParams.get("filtro");
+        document.getElementById("aqui").value = c;
+    </script>
+
+</body>
+
+</html>
