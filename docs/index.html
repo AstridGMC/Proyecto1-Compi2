@@ -2,8 +2,8 @@
 <html lang="en">
 
 <head>
-	<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="./codemirror-5.61.1/lib/codemirror.css">
@@ -72,25 +72,21 @@
                                 <div class="dropdown-content1">
                                     <form action="./Frontend/errores.html" method="get">
                                         <input hidden id="tabErrores" name="erroresV" />
-                                        <input style="background-color: Transparent; color:white; border: none;"
-                                            onclick="" type="submit" value="CST">
+                                        <input style="background-color: Transparent; color:white; border: none;"  onclick="" type="submit" value="CST">
                                     </form>
                                     <form action="./Frontend/errores.html" method="get">
                                         <input hidden id="tabErrores" name="erroresV" />
-                                        <input style="background-color: Transparent; color:white; border: none;"
-                                            onclick="" type="submit" value="AST">
+                                        <input style="background-color: Transparent; color:white; border: none;"  onclick="" type="submit" value="AST">
                                     </form>
                                 </div>
                             </div>
                             <form action="./Frontend/tablaSimbolos.html" method="get">
-                                <input hidden id="tabErrores" name="simbolostb" />
-                                <a><input style="background-color: Transparent; color:white; border: none;"
-                                        type="submit" value="Tabla de Simbolos"></a>
+                                <input hidden id="tabErrores" name="simbolostb"/>
+                                    <a><input style="background-color: Transparent; color:white; border: none;" type="submit" value="Tabla de Simbolos"></a>
                             </form>
                             <form action="./Frontend/tabGramatical.html" method="get">
-                                <input hidden id="gramaticaltb" name="tablaGr" />
-                                <input style="background-color: Transparent; color:white; border: none;" type="submit"
-                                    value="Tabla Gramatical">
+                                <input hidden id="gramaticaltb" name="tablaGr"/>
+                                    <input style="background-color: Transparent; color:white; border: none;" type="submit" value="Tabla Gramatical">
                             </form>
                     </nav>
                 </div>
@@ -171,48 +167,42 @@
 
 
 
-        var btnXML = document.getElementById("ascendente");
-        inputElement.addEventListener("onclick", leerArchivo, false);
-        import $ from 'jquery';
-        (function () {
+            var btnXML = document.getElementById("ascendente");
+            inputElement.addEventListener("onclick", leerArchivo, false);
+
             $('#ascendente').click(function () {
-            // Recupera el contenido del js especificado para tener acceso a funciones definidas en: define()
-            requirejs(['./Scripts/Gramaticas/xml/gramarxml.js'],
-                function (grammarXML) {
-                    erroresGramar = [];
-                    var entrada = editor.getValue();
-                    if (entrada.length >= 0) {
-                        var xmlAST = grammarXML.getParser().parse(entrada);
-                        llenarTablaErrores();
-                        llenarTablaGramatical();
-                    } else {
-                        alert("EL ARCHIVO DE ENTRADA ESTA VACIO\n");
-                    }
-                });
+                // Recupera el contenido del js especificado para tener acceso a funciones definidas en: define()
+                requirejs(['./Scripts/Gramaticas/xml/gramarxml.js'],
+                    function (grammarXML) {
+                        erroresGramar = [];
+                        var entrada =  editor.getValue();
+                        if (entrada.length >= 0) {
+                            var xmlAST = grammarXML.getParser().parse(entrada);
+                            llenarTablaErrores();
+                            llenarTablaGramatical();
+                        } else {
+                            alert("EL ARCHIVO DE ENTRADA ESTA VACIO\n");
+                        }
+                    });
             });
 
-        $('#descendente').click(function () {
-            // Recupera el contenido del js especificado para tener acceso a funciones definidas en: define()
-            requirejs(['./Scripts/Gramaticas/xml/gramarxmldes.js'],
-                function (gramarxmlDes) {
-                    erroresGramar = [];
-                    var entrada = editor.getValue();
-                    console.log(entrada);
-                    if (entrada.length >= 0) {
-                        var xmldesAST = gramarxmlDes.getParser().parse(entrada);
-                        llenarTablaErrores();
-                        llenarTablaGramatical();
-                    } else {
-                        alert("EL ARCHIVO DE ENTRADA ESTA VACIO\n");
-                    }
-                });
+            $('#descendente').click(function () {
+                // Recupera el contenido del js especificado para tener acceso a funciones definidas en: define()
+                requirejs(['./Scripts/Gramaticas/xml/gramarxmldes.js'],
+                    function (gramarxmlDes) {
+                        erroresGramar = [];
+                        var entrada =  editor.getValue();
+                        console.log(entrada);
+                        if (entrada.length >= 0) {
+                            var xmldesAST = gramarxmlDes.getParser().parse(entrada);
+                            llenarTablaErrores();
+                            llenarTablaGramatical();
+                        } else {
+                            alert("EL ARCHIVO DE ENTRADA ESTA VACIO\n");
+                        }
+                    });
 
-        });
-
-        })()
-        
-
-        
+            });
 
     </script>
 </body>
