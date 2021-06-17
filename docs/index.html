@@ -122,9 +122,9 @@
                 </div>
                 <div style="width:48%; padding-right: 5%; float:right;">
 
-                    <button type="button" class="btn btn-light btn_blue" onclick=""><img src="./css/imagenes/asc.png" />
+                    <button type="button" class="btn btn-light btn_blue" onclick="analisisAscXPATH()"><img src="./css/imagenes/asc.png" />
                         Analizar Ascendente </button>
-                    <button type="button" class="btn btn-light btn_blue" onclick="reglasgg()"><img
+                    <button type="button" class="btn btn-light btn_blue" onclick="analisisDescXPATH()"><img
                             src="./css/imagenes/desc.png" />
                         Analizar Descendente </button>
 
@@ -160,6 +160,8 @@
     <script type="text/javascript" src="Scripts/clasesXML/Atributo.js"></script>
     <script type="text/javascript" src="Scripts/Errores/Error.js"></script>
     <script type="text/javascript" src="./Scripts/Gramaticas/xml/gramarxml.js"></script>
+    <script type="text/javascript" src="./Scripts/Gramaticas/xpath/gramaticaXpath.js"></script>
+    <script type="text/javascript" src="./Scripts/Gramaticas/xpath/gramaticaXpathDesc.js"></script>
     <script type="text/javascript" src="./Scripts/Arboles/Regla.js"></script>
     <script src="./Scripts/Gramaticas/xml/gramarxmldes.js"></script>
     <script src="./Gramaticas/xml/funcionesParseo.js"></script>
@@ -194,6 +196,42 @@
                     function (grammarXMLDesc) {
                         erroresGramar = [];
                         var entrada =  editor.getValue();
+                        console.log(entrada);
+                        if (entrada.length >= 0) {
+                            var xmldesAST = grammarXMLDesc.getParser().parse(entrada);
+                            llenarTablaErrores();
+                            llenarTablaGramatical();
+                        } else {
+                            alert("EL ARCHIVO DE ENTRADA ESTA VACIO\n");
+                        }
+                    });
+            }
+
+            function analisisAscXPATH(){
+                // Recupera el contenido del js especificado para tener acceso a funciones definidas en: define()
+                requirejs(['gramaticaxpath'],
+                    function (gramaticaxpath) {
+                        erroresGramar = [];
+                        var editorxpath = document.getElementById('consola');
+                        var entrada =  editorxpath.value;
+                        if (entrada.length >= 0) {
+                            var xmlAST = grammarXMLAsc.getParser().parse(entrada);
+                            llenarTablaErrores();
+                            llenarTablaGramatical();
+                            document.getElementById('tabSimbolosXML').setAttribute('value',JSON.stringify(xmlAST));
+                        } else {
+                            alert("EL ARCHIVO DE ENTRADA ESTA VACIO\n");
+                        }
+                    });
+            }
+
+            function analisisDescXPATH(){
+                // Recupera el contenido del js especificado para tener acceso a funciones definidas en: define()
+                requirejs(['gramaticaXpathDesc'],
+                    function (gramaticaXpathDesc) {
+                        erroresGramar = [];
+                        var editorxpath = document.getElementById('consola');
+                        var entrada =  editorxpath.value;
                         console.log(entrada);
                         if (entrada.length >= 0) {
                             var xmldesAST = grammarXMLDesc.getParser().parse(entrada);

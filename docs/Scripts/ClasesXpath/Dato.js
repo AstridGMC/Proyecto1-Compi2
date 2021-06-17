@@ -8,6 +8,9 @@ var Dato = /** @class */ (function () {
         this.columna = columna;
         this.valor = valor;
     }
+    Error.prototype.getValor = function () {
+        return this.valor;
+    };
     Dato.prototype.getTipo = function (arbol) {
         var valor = this.getValorImplicito(arbol);
         if (typeof (valor) === 'boolean') {

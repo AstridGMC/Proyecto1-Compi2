@@ -89,6 +89,15 @@
 %left '^'
 
 %{
+
+	define('gramaticaXpathDesc',function () {
+        return {
+            getParser: function () {
+                return gramaticaXpathDesc;
+            }
+        };
+    });
+
 	const {Dato} = require("../../../Scripts/ClasesXpath/Dato");
 	const {OperacionAritmetica} = require("../../../Scripts/ClasesXpath/OperacionAritmetica");
 	const {Operador} = require("../../../Scripts/ClasesXpath/Operador");
@@ -161,7 +170,9 @@ CONSULTAS : CONSULTA CONSULTAS_PRIMA
 	}
 ;
 
-CONSULTAS_PRIMA : CONSULTA CONSULTAS_PRIMA 
+CONSULTAS_PRIMA : 
+
+	CONSULTA CONSULTAS_PRIMA 
 	{$$=[$1]; $$ = $$.concat($2);
 		var regla = new Regla("GRAMATICAL","CONSULTAS_PRIMA-> CONSULTA CONSULTAS_PRIMA ",""); ingresarRegla(regla);
 	}
@@ -174,190 +185,698 @@ CONSULTAS_PRIMA : CONSULTA CONSULTAS_PRIMA
 
 CONSULTA :
 	DIAGONALES  
-		{$$=$1;
-		var regla = new Regla("GRAMATICAL","CONSULTA-> DIAGONALES","retornar DIAGONALES"); ingresarRegla(regla);
-		}
+	{
+		//AST
+		$$[1]=$1[1];
+		//CST
+		$$[2]=++yy.idCST;
+		yy.dotCST+= yy.idCST+' [label="'+'CONSULTA'+'"];'+'\n'; 
+		yy.dotCST += yy.idCST+'--'+$1[2]+';'+'\n';
+		
+		$$[0]=$1[0];
+		var regla = new Regla("GRAMATICAL","CONSULTA-> DIAGONALES",""); ingresarRegla(regla);
+	}
 	| TIPO_ID
-		{$$=$1;
-		var regla = new Regla("GRAMATICAL","CONSULTA-> TIPO_ID","retornar TIPO_ID"); ingresarRegla(regla);
-		}
-	| punto//antes debe de haber un /id/  //id/ etc, sino error semantico
-		{$$ = new SimbolosXpath(TiposXpath.PUNTO,@1.first_line, @1.first_column);
-		var regla = new Regla("GRAMATICAL","CONSULTA-> punto","regresar nuevo simbolo xpath punto"); ingresarRegla(regla);
+	{
+		//AST
+		$$[1]=$1[1];
+		//CST
+		$$[2]=++yy.idCST;
+		yy.dotCST+= yy.idCST+' [label="'+'CONSULTA'+'"];'+'\n'; 
+		yy.dotCST += yy.idCST+'--'+$1[2]+';'+'\n';
 
-		}
-	| dosPuntosConsecutivos  //antes debe de haber un /id/ o //id/ etc, sino error semantico 
-		{$$ = new SimbolosXpath(TiposXpath.DOSPUNTOSCONSECUTIVOS,@1.first_line, @1.first_column);
+		$$[0]=$1[0];
+		var regla = new Regla("GRAMATICAL","CONSULTA-> TIPO_ID",""); ingresarRegla(regla);
+	}
+	| punto
+	{
+		//AST
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+		//CST
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= yy.idCST+' [label="'+'CONSULTA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'punto'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+yy.text+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+
+		$$[0] = new SimbolosXpath(TiposXpath.PUNTO,@1.first_line, @1.first_column);
+		var regla = new Regla("GRAMATICAL","CONSULTA-> punto",""); ingresarRegla(regla);
+	}
+	| dosPuntos
+	{
+		//AST
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+		//CST
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= yy.idCST+' [label="'+'CONSULTA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'dosPuntos'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+yy.text+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+
+		$$[0] = new SimbolosXpath(TiposXpath.DOSPUNTOSCONSECUTIVOS,@1.first_line, @1.first_column);
+		var regla = new Regla("GRAMATICAL","CONSULTA-> dosPuntos",""); ingresarRegla(regla);
+	}
+	| FUNCION
+	{
+		//AST
+		$$[1]=$1[1];
+		//CST
+		$$[2]=++yy.idCST;
+		yy.dotCST+= yy.idCST+' [label="'+'CONSULTA'+'"];'+'\n'; 
+		yy.dotCST += yy.idCST+'--'+$1[2]+';'+'\n';
+
+		$$[0]=$1[0];
 		var regla = new Regla("GRAMATICAL","CONSULTA-> FUNCION",""); ingresarRegla(regla);
-		}
-	| FUNCION 
-		{$$=$1;
-		var regla = new Regla("GRAMATICAL","CONSULTA-> FUNCION","retornar FUNCION"); ingresarRegla(regla);
-		}
+	}
 ;
+
+
 
 
 DIAGONALES:
-	diagonalDoble SIMBOLOS   
-		{ $$ = new diagonalDobleC($2, @1.first_line, @1.first_column); 
-		var regla = new Regla("GRAMATICAL","DIAGONALES -> diagonalDoble SIMBOLOS  ","retorna nueva diagonalDoble;"); ingresarRegla(regla);
-		}
+	diagonalDoble SIMBOLOS  
+	{
+		var padre1 =++yy.idAST;
+		yy.dotAST+= padre1+' [label="'+'DIAGONALES'+'"];'+'\n'; 
+		var hijo =++yy.idAST;
+		yy.dotCST+= hijo+' [label="'+'//'+'"];'+'\n'; 
+
+		yy.dotAST += padre1+'--'+hijo+';'+'\n';
+		yy.dotAST += padre1+'--'+$2[1]+';'+'\n';
+		$$[1]=padre1;
+
+		var padre =++yy.idCST;
+		yy.dotCST+= padre+' [label="'+'DIAGONALES'+'"];'+'\n'; 
+		var hijo =++yy.idCST;
+		yy.dotCST+= hijo+' [label="'+'diagonalDoble'+'"];'+'\n'; 
+		var hijo1 =++yy.idCST;
+		yy.dotCST+= hijo1+' [label="'+$1.yytext+'"];'+'\n'; 
+		yy.dotCST += padre+'--'+hijo+';'+'\n';
+		yy.dotCST += padre+'--'+$2[2]+';'+'\n';
+		yy.dotCST += hijo+'--'+hijo1+';'+'\n';
+		$$[2]=padre;
+
+		 $$[0] = new diagonalDobleC($2[0], @1.first_line, @1.first_column);
+		var regla = new Regla("GRAMATICAL","DIAGONALES-> diagonalDoble SIMBOLOS","crear nodos AST;\n Crear nodos CST;\n Return newDiagonalDoble;"); ingresarRegla(regla);
+	} 
 	| diagonal SIMBOLOS 
-		{ $$ = new diagonalSimpleS($2, @1.first_line, @1.first_column); 
-		var regla = new Regla("GRAMATICAL","DIAGONALES -> diagonal SIMBOLOS ","retorna nueva DiagonalSimple"); ingresarRegla(regla);
-		}
+	{
+		var padre1 =++yy.idAST;
+		yy.dotAST+= padre1+' [label="'+'DIAGONALES'+'"];'+'\n'; 
+		var hijo =++yy.idAST;
+		yy.dotCST+= hijo+' [label="'+'/'+'"];'+'\n'; 
+
+		yy.dotAST += padre1+'--'+hijo+';'+'\n';
+		yy.dotAST += padre1+'--'+$2[1]+';'+'\n';
+		$$[1]=padre1;
+
+		var padre =++yy.idCST;
+		yy.dotCST+= padre+' [label="'+'DIAGONALES'+'"];'+'\n'; 
+		var hijo =++yy.idCST;
+		yy.dotCST+= hijo+' [label="'+'diagonal'+'"];'+'\n'; 
+		var hijo1 =++yy.idCST;
+		yy.dotCST+= hijo1+' [label="'+$1.yytext+'"];'+'\n'; 
+		yy.dotCST += padre+'--'+hijo+';'+'\n';
+		yy.dotCST += padre+'--'+$2[2]+';'+'\n';
+		yy.dotCST += hijo+'--'+hijo1+';'+'\n';
+		$$[2]=padre;
+
+		 $$[0] = new diagonalSimpleS($2[0], @1.first_line, @1.first_column);
+		var regla = new Regla("GRAMATICAL","DIAGONALES-> diagonal SIMBOLOS","crear nodos AST, crear nodos AST, retornar diagramas"); ingresarRegla(regla);
+	}
 ;
+
 
 SIMBOLOS:  
-	arroba SIGUIENTE_ARROBA  
-		{ $$ = new Arroba($2, @1.first_line, @1.first_column);
-		var regla = new Regla("GRAMATICAL","SIMBOLOS -> arroba SIGUIENTE_ARROBA","retorna nuevo representacion de arroba;"); ingresarRegla(regla);
-		 }
-	| asterisco //a partir de aqui verificar que sea logico para ver si se toma o no estas 3 producciones
-		{$$ = new SimbolosXpath(TiposXpath.ASTERISCO,@1.first_line, @1.first_column);
-		var regla = new Regla("GRAMATICAL","SIMBOLOS-> asterisco","retorna nuevo simboloxpath asterisco;"); ingresarRegla(regla);
-		}
-	| punto//antes debe de haber un /id/  //id/ etc, sino error semantico
-		{$$ = new SimbolosXpath(TiposXpath.PUNTO,@1.first_line, @1.first_column);
-		var regla = new Regla("GRAMATICAL","SIMBOLOS-> punto","retorna nuevo simboloxpath punto;"); ingresarRegla(regla);
-		}
-	| dosPuntosConsecutivos  //antes debe de haber un /id/ o //id/ etc, sino error semantico 
-		{$$ = new SimbolosXpath(TiposXpath.DOSPUNTOSCONSECUTIVOS,@1.first_line, @1.first_column);
-		var regla = new Regla("GRAMATICAL","SIMBOLOS-> dosPuntosConsecutivos","retorna nuevo simboloxpath dosPuntos;"); ingresarRegla(regla);
-		}
-	| FUNCION
-		{$$=$1;
-		var regla = new Regla("GRAMATICAL","SIMBOLOS-> FUNCION","retorna arregloGramatica[0];"); ingresarRegla(regla);
-		}
-	| METODOS
-		{$$-0=$1[0];
-		var regla = new Regla("GRAMATICAL","SIMBOLOS-> METODOS","retorna arregloGramatica[0];"); ingresarRegla(regla);
-		}
+	arroba SIGUIENTE_ARROBA  {
+		var padre =++yy.idAST;
+		yy.dotAST+= padre+' [label="'+'SIMBOLOS'+'"];'+'\n'; 
+		var hijo =++yy.idAST;
+		yy.dotCST+= hijo+' [label="'+'arroba'+'"];'+'\n'; 
+		
+		yy.dotAST += padre+'--'+hijo+';'+'\n';
+		yy.dotAST += padre+'--'+$2[1]+';'+'\n';
+		$$[1]=padre;
 
-	| TIPO_ID
-		{$$[0]=$1[0];
-		var regla = new Regla("GRAMATICAL","SIMBOLOS-> TIPO_ID","retorna arregloGramatica[0];"); ingresarRegla(regla);
-		}
+		var padre =++yy.idCST;
+		yy.dotCST+= padre+' [label="'+'SIMBOLOS'+'"];'+'\n'; 
+		var hijo =++yy.idCST;
+		yy.dotCST+= hijo+' [label="'+'arroba'+'"];'+'\n'; 
+		yy.dotCST += padre+'--'+hijo+';'+'\n';
+		yy.dotCST += padre+'--'+$2[2]+';'+'\n';
+		$$[2]=padre;
+
+		 $$[0] = new Arroba($2[0], @1.first_line, @1.first_column); 
+		var regla = new Regla("GRAMATICAL","SIMBOLOS-> arroba SIGUIENTE_ARROBA",""); ingresarRegla(regla);
+	} 
+	| asterisco   {
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= yy.padre+' [label="'+'SIMBOLOS'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'asterisco'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+yytext+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+
+		$$[0] = new SimbolosXpath(TiposXpath.ASTERISCO,@1.first_line, @1.first_column);
+		var regla = new Regla("GRAMATICAL","SIMBOLOS-> asterisco",""); ingresarRegla(regla);
+	}
+	| dosPuntosConsecutivos {//antes debe de haber un /id/ o //id/ etc, sino error semantico{
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= yy.padre+' [label="'+'SIMBOLOS'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'dosPuntosConsecutivos'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+yytext+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+
+		$$[0] = new SimbolosXpath(TiposXpath.DOSPUNTOSCONSECUTIVOS,@1.first_line, @1.first_column);
+		var regla = new Regla("GRAMATICAL","SIMBOLOS-> dosPuntosConsecutivos",""); ingresarRegla(regla);
+	}
+	| punto {//antes debe de haber un /id/  //id/ etc, sino error semantico{
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= yy.padre+' [label="'+'SIMBOLOS'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'punto'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+yytext+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+
+		$$[0] = new SimbolosXpath(TiposXpath.PUNTO,@1.first_line, @1.first_column);
+		var regla = new Regla("GRAMATICAL","SIMBOLOS-> punto",""); ingresarRegla(regla);
+	}
+	| FUNCION{
+		//AST
+		$$[1]=$1[1];
+		//CST
+		$$[2]=++yy.idCST;
+		yy.dotCST+= yy.idCST+' [label="'+'SIMBOLOS'+'"];'+'\n'; 
+		yy.dotCST += yy.idCST+'--'+$1[2]+';'+'\n';
+		$$[0]=$1[0];
+		var regla = new Regla("GRAMATICAL","SIMBOLOS-> FUNCION",""); ingresarRegla(regla);
+	}
+	| METODOS{
+		//AST
+		$$[1]=$1[1];
+		//CST
+		$$[2]=++yy.idCST;
+		yy.dotCST+= yy.idCST+' [label="'+'SIMBOLOS'+'"];'+'\n'; 
+		yy.dotCST += yy.idCST+'--'+$1[2]+';'+'\n';
+		$$[0]=$1[0];
+		var regla = new Regla("GRAMATICAL","SIMBOLOS-> TIPO_ID",""); ingresarRegla(regla);
+	}
+	| TIPO_ID{
+		//AST
+		$$[1]=$1[1];
+		//CST
+		$$[2]=++yy.idCST;
+		yy.dotCST+= yy.idCST+' [label="'+'SIMBOLOS'+'"];'+'\n'; 
+		yy.dotCST += yy.idCST+'--'+$1[2]+';'+'\n';
+
+		$$[0]=$1[0];
+		var regla = new Regla("GRAMATICAL","SIMBOLOS-> TIPO_ID",""); ingresarRegla(regla);
+	}
 ;
+
 
 
 SIGUIENTE_ARROBA :  //selecciona atributos *-> todos, o todos con un id
 	identificador   {
-		 $$ = new Dato($1, @1.first_line, @1.first_column); 
-		var regla = new Regla("GRAMATICAL","SIGUIENTE_ARROBA-> identificador","retorna nuevo dato"); ingresarRegla(regla);
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+		
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'SIGUIENTE_ARROBA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'identificador'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+yytext+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+		
+		$$[0] = new Dato(yytext, @1.first_line, @1.first_column); 
+		var regla = new Regla("GRAMATICAL","SIGUIENTE_ARROBA-> identificador",""); ingresarRegla(regla);
 	}
 	| asterisco   {
-		$$ = new SimbolosXpath(TiposXpath.ASTERISCO,@1.first_line, @1.first_column);
-		var regla = new Regla("GRAMATICAL","SIGUIENTE_ARROBA-> asterisco","retorna nuevo simboloXPATH  asterisco"); ingresarRegla(regla);
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'SIGUIENTE_ARROBA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'asterisco'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+yytext+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+
+		$$[0] = new SimbolosXpath(TiposXpath.ASTERISCO,@1.first_line, @1.first_column);
+		var regla = new Regla("GRAMATICAL","SIGUIENTE_ARROBA-> asterisco",""); ingresarRegla(regla);
 	}
 ;
+
 
 FUNCION :
 	funcionNode{
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'FUNCION'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'funcionNode'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+yytext+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+
+		$$[0] = new Funcion(TiposXpath.FUNCION_NODE,@1.first_line, @1.first_column);
 		var regla = new Regla("GRAMATICAL","FUNCION-> funcionNode",""); ingresarRegla(regla);
-		$$ = new Funcion(TiposXpath.FUNCION_NODE,@1.first_line, @1.first_column);
 	}
 	| funcionText{
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'FUNCION'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'funcionText'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+yytext+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+
+		$$[0] = new Funcion(TiposXpath.FUNCION_TEXT,@1.first_line, @1.first_column);
 		var regla = new Regla("GRAMATICAL","FUNCION-> funcionText",""); ingresarRegla(regla);
-		$$ = new Funcion(TiposXpath.FUNCION_TEXT,@1.first_line, @1.first_column);
 	}
 	|funcionLast{
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'FUNCION'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'funcionLast'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+yy.text+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+
+		$$[0] = new Funcion(TiposXpath.FUNCION_LAST,@1.first_line, @1.first_column);
 		var regla = new Regla("GRAMATICAL","FUNCION-> funcionLast",""); ingresarRegla(regla);
-		$$ = new Funcion(TiposXpath.FUNCION_LAST,@1.first_line, @1.first_column);
 	}
 	|funcionPosition{
 		var regla = new Regla("GRAMATICAL","FUNCION-> funcionPosition",""); ingresarRegla(regla);
-		$$ = new Funcion(TiposXpath.FUNCION_POSITION,@1.first_line, @1.first_column);
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'FUNCION'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'funcionPosition'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+yytext+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+
+		$$[0] = new Funcion(TiposXpath.FUNCION_POSITION,@1.first_line, @1.first_column);
 	}
 ;
 
+
+
 METODOS: //no puede venir sin antes especificar un nodo , no a la par de un id, puede venir despues de alguna diagonal o dentro del arreglo
 	PALABRA_RESERVADA  dosPuntos dosPuntos SIGUIENTE_METODO {
+		var padre =++yy.idAST;
+		yy.dotAST+= padre+' [label="'+'::'+'"];'+'\n'; 
+		yy.dotAST += padre+'--'+$1[1]+';'+'\n';
+		yy.dotAST += padre+'--'+$3[1]+';'+'\n';
+		$$[1]=padre;
+
+		var padre =++yy.idCST;
+		yy.dotCST+= padre+' [label="'+'METODOS'+'"];'+'\n'; 
+		var hijo =++yy.idCST;
+		yy.dotCST+= hijo+' [label="'+'mas'+'"];'+'\n'; 
+		var hijo2 =++yy.idCST;
+		yy.dotCST+= hijo+' [label="'+'::'+'"];'+'\n'; 
+		yy.dotCST += padre+'--'+$1[2]+';'+'\n';
+		yy.dotCST += padre+'--'+hijo+';'+'\n';
+		yy.dotCST += padre+'--'+$3[2]+';'+'\n';
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';
+		$$[2]=padre;
+
+		$$[0] = new Metodo($1[0],$4[0],@1.first_line, @1.first_column);
 		var regla = new Regla("GRAMATICAL","METODOS-> PALABRA_RESERVADA  dosPuntos dosPuntos SIGUIENTE_METODO",""); ingresarRegla(regla);
-		$$ = new Metodo($1,$4,@1.first_line, @1.first_column);
 	}
 ;
 
 PALABRA_RESERVADA:
 	ancestor1{
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+$1+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'PALABRA_RESERVADA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'ancestor1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+$1+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+
+		$$[0]=TiposXpath.METODO_ANCESTOR;
 		var regla = new Regla("GRAMATICAL","PALABRA_RESERVADA-> ancestor1",""); ingresarRegla(regla);
-		$$=TiposXpath.METODO_ANCESTOR;
 	}
 	| ancestor_or_self1	{
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+$1+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'PALABRA_RESERVADA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'ancestor_or_self1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+$1+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+		$$[0] =TiposXpath.METODO_ANCESTOR_OR_SELF;
 		var regla = new Regla("GRAMATICAL","PALABRA_RESERVADA-> ancestor_or_self1",""); ingresarRegla(regla);
-		$$=TiposXpath.METODO_ANCESTOR_OR_SELF;
 	}
 	| attribute1{
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+$1+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'PALABRA_RESERVADA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'attribute1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+$1+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+
+		$$[0]=TiposXpath.METODO_ATRIBUTE;
 		var regla = new Regla("GRAMATICAL","PALABRA_RESERVADA-> attribute1",""); ingresarRegla(regla);
-		$$=TiposXpath.METODO_ATRIBUTE;
 	}
 	| child1{
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+$1+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'PALABRA_RESERVADA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'child1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+$1+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+		$$[0]=TiposXpath.METODO_CHILD;
 		var regla = new Regla("GRAMATICAL","PALABRA_RESERVADA-> child1",""); ingresarRegla(regla);
-		$$=TiposXpath.METODO_CHILD;
 	}
 	| descendant1{
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+$1+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'PALABRA_RESERVADA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'descendant1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+$1+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+		$$[0]=TiposXpath.METODO_DESCENDANT;
 		var regla = new Regla("GRAMATICAL","PALABRA_RESERVADA-> descendant1",""); ingresarRegla(regla);
-		$$=TiposXpath.METODO_DESCENDANT;
 	}
 	| descendant_or_self1	{
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'PALABRA_RESERVADA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'descendant_or_self1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+yytext+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+		$$[0] =TiposXpath.METODO_METODO_DESCENDANT_OR_SELF;
 		var regla = new Regla("GRAMATICAL","PALABRA_RESERVADA-> following1",""); ingresarRegla(regla);
-		$$=TiposXpath.METODO_METODO_DESCENDANT_OR_SELF;
 	}
 	| following1{
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'PALABRA_RESERVADA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'following1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+yytext+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+		$$[0]=TiposXpath.METODO_FOLLOWING;
 		var regla = new Regla("GRAMATICAL","PALABRA_RESERVADA-> following1",""); ingresarRegla(regla);
-		$$=TiposXpath.METODO_FOLLOWING;
 	}
 	| following_sibling1	{
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'PALABRA_RESERVADA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'following_sibling1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+yytext+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+		$$[0]=TiposXpath.METODO_FOLLOWING_SIGLING;
 		var regla = new Regla("GRAMATICAL","PALABRA_RESERVADA-> following_sibling1",""); ingresarRegla(regla);
-		$$=TiposXpath.METODO_FOLLOWING_SIGLING;
 	}
 	| parent1{
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'PALABRA_RESERVADA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'parent1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+yytext+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+		$$[0]=TiposXpath.METODO_PARENT;
 		var regla = new Regla("GRAMATICAL","PALABRA_RESERVADA-> preceding1",""); ingresarRegla(regla);
-		$$=TiposXpath.METODO_PARENT;
 	}
 	| preceding1{
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'PALABRA_RESERVADA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'preceding1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+yytext+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+
+		$$[0]=TiposXpath.METODO_PRECEDING;
 		var regla = new Regla("GRAMATICAL","PALABRA_RESERVADA-> preceding1",""); ingresarRegla(regla);
-		$$=TiposXpath.METODO_PRECEDING;
 	}
 	| preceding_sibling1	{
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'PALABRA_RESERVADA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'preceding_sibling1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+yytext+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+
+		$$[0]=TiposXpath.METODO_PRECEDING_SIBLING;
 		var regla = new Regla("GRAMATICAL","PALABRA_RESERVADA-> preceding_sibling1",""); ingresarRegla(regla);
-		$$=TiposXpath.METODO_PRECEDING_SIBLING;
 	}
 	| self1	{
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'PALABRA_RESERVADA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'self1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+yytext+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+
+		$$[0]=TiposXpath.METODO_SELF;
 		var regla = new Regla("GRAMATICAL","PALABRA_RESERVADA-> self1",""); ingresarRegla(regla);
-		$$=TiposXpath.METODO_SELF;
 	}
 ;
+
+	
 SIGUIENTE_METODO:
 	FUNCION {
+		//AST
+		$$[1]=$1[1];
+		//CST
+		$$[2]=++yy.idCST;
+		yy.dotCST+= yy.idCST+' [label="'+'FUNCION'+'"];'+'\n'; 
+		
+		yy.dotCST += yy.idCST+'--'+$1[2]+';'+'\n';
 		var regla = new Regla("GRAMATICAL","SIGUIENTE_METODO-> FUNCION",""); ingresarRegla(regla);
-		$$=$1;
 	}
 	| TIPO_ID {
-		$$=$1;
+		//AST
+		$$[1]=$1[1];
+		//CST
+		$$[2]=++yy.idCST;
+		yy.dotCST+= yy.idCST+' [label="'+'SIGUIENTE_METODO'+'"];'+'\n'; 
+		yy.dotCST += yy.idCST+'--'+$1[2]+';'+'\n';
+
+		$$[0]=$1[0];
 		var regla = new Regla("GRAMATICAL","SIGUIENTE_METODO-> punto",""); ingresarRegla(regla);
 	}
 	| asterisco {//a partir de aqui verificar que sea logico para ver si se toma o no estas 3 producciones{
-		$$ = new SimbolosXpath(TiposXpath.ASTERISCO,@1.first_line, @1.first_column);
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+$1+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'SIGUIENTE_METODO'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'asterisco'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+$1+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+
+		$$[0] = new SimbolosXpath(TiposXpath.ASTERISCO,@1.first_line, @1.first_column);
 		var regla = new Regla("GRAMATICAL","SIGUIENTE_METODO-> punto",""); ingresarRegla(regla);
 	}
 	| punto {
-		$$ = new SimbolosXpath(TiposXpath.PUNTO,@1.first_line, @1.first_column);
-		var regla = new Regla("GRAMATICAL","SIGUIENTE_METODO-> punto",""); ingresarRegla(regla);
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+$1+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'SIGUIENTE_METODO'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'punto'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+$1+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+		
+		$$[0] = new SimbolosXpath(TiposXpath.PUNTO,@1.first_line, @1.first_column);
+		var regla = new Regla("GRAMATICAL","SIGUIENTE_METODO-> punto","return nuevo tipoSImboloXPATH"); ingresarRegla(regla);
 	}
 	| dosPuntos {
-		$$ = new SimbolosXpath(TiposXpath.DOSPUNTOSCONSECUTIVOS,@1.first_line, @1.first_column);
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+$1+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'$$ = new SimbolosXpath(TiposXpath.PUNTO,@1.first_line, @1.first_column);SIGUIENTE_METODO'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'dosPuntos'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+$1+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+
+		$$[0] = new SimbolosXpath(TiposXpath.DOSPUNTOSCONSECUTIVOS,@1.first_line, @1.first_column);
 		var regla = new Regla("GRAMATICAL","SIGUIENTE_METODO-> dosPuntos",""); ingresarRegla(regla);
 	}
 ;
 
+
 TIPO_ID :
 	identificador  {//bookstore{
-		var regla = new Regla("GRAMATICAL","ARREGLO_ID-> identificador",""); ingresarRegla(regla);
-		$$ = new IdSimple($1,@1.first_line, @1.first_column);
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+$1+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'TIPO_ID'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'identificador'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+$1+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+		$$[0] = new IdSimple($1,@1.first_line, @1.first_column);
+		var regla = new Regla("GRAMATICAL","ARREGLO_ID-> identificador","return idSimple"); ingresarRegla(regla);
 	}
 	| identificador ARREGLOS_ID  { // booksotre[ operaciones ]{
-		$$ = new IdCompuesto($1,$2,@1.first_line, @1.first_column);
+		var padre =++yy.idAST;
+		yy.dotAST+= padre+' [label="'+'TIPO_ID'+'"];'+'\n'; 
+		var hijo =++yy.idAST;
+		yy.dotCST+= hijo+' [label="'+$1+'"];'+'\n'; 
+
+		yy.dotAST += padre+'--'+hijo+';'+'\n';
+		yy.dotAST += padre+'--'+$2[1]+';'+'\n';
+		$$[1]=padre;
+
+		var padre =++yy.idCST;
+		yy.dotCST+= padre+' [label="'+'TIPO_ID'+'"];'+'\n'; 
+		var hijo =++yy.idCST;
+		yy.dotCST+= hijo+' [label="'+'identificador'+'"];'+'\n'; 
+		var hijo1 =++yy.idCST;
+		yy.dotCST+= hijo1+' [label="'+$1+'"];'+'\n'; 
+		yy.dotCST += padre+'--'+hijo+';'+'\n';
+		yy.dotCST += padre+'--'+$2[2]+';'+'\n';
+		yy.dotCST += hijo+'--'+hijo1+';'+'\n';
+		$$[2]=padre;
+
+		$$[0] = new IdCompuesto($1,$2[0],@1.first_line, @1.first_column);
 		var regla = new Regla("GRAMATICAL","ARREGLO_ID-> identificador ARREGLOS_ID",""); ingresarRegla(regla);
 	}
 ;
@@ -365,55 +884,156 @@ TIPO_ID :
 
 ARREGLOS_ID : 
 	ARREGLO_ID ARREGLOS_ID_PRIMA{
+		//AST
+		var padre1 =++yy.idAST;
+		yy.dotAST+= padre+' [label="'+'ARREGLOS_ID_PRIMA'+'"];'+'\n'; 
+
+		yy.dotAST += padre1+'--'+$1[1]+';'+'\n';
+		yy.dotAST += padre1+'--'+$2[1]+';'+'\n';
+		$$[1]=padre1;
+		//CST
+		var padre=++yy.idCST;
+		yy.dotCST+= padre+' [label="'+'ARREGLOS_ID_PRIMA'+'"];'+'\n'; 
+		yy.dotCST += padre+'--'+$1[2]+';'+'\n';
+		yy.dotCST += padre+'--'+$2[2]+';'+'\n';
+		$$[2]=padre;
+
 		var regla = new Regla("GRAMATICAL","ARREGLOS_ID-> ARREGLO_ID ARREGLOS_ID_PRIMA",""); ingresarRegla(regla);
-		$$=[$1]; $$= $$.concat($2);
+		$$[0]=[$1[0]]; $$[0]= $$[0].concat($2[0]);
 	}
 ;
 
 ARREGLOS_ID_PRIMA : 
 	ARREGLO_ID ARREGLOS_ID_PRIMA {
-		$$=[$1]; $$ = $$.concat($2);
+		//AST
+		var padre1 =++yy.idAST;
+		yy.dotAST+= padre+' [label="'+'ARREGLOS_ID_PRIMA'+'"];'+'\n'; 
+
+		yy.dotAST += padre1+'--'+$1[1]+';'+'\n';
+		yy.dotAST += padre1+'--'+$2[1]+';'+'\n';
+		$$[1]=padre1;
+		//CST
+		var padre=++yy.idCST;
+		yy.dotCST+= padre+' [label="'+'ARREGLOS_ID_PRIMA'+'"];'+'\n'; 
+		yy.dotCST += padre+'--'+$1[2]+';'+'\n';
+		yy.dotCST += padre+'--'+$2[2]+';'+'\n';
+		$$[2]=padre;
+
+
+		$1[0].push($2[0]); 
+		$$[0] = $1[0]
+		$$[0]=[$1[0]]; $$[0] = $$[0].concat($2);
 		var regla = new Regla("GRAMATICAL","ARREGLOS_ID_PRIMA-> ARREGLO_ID ARREGLOS_ID_PRIMA",""); ingresarRegla(regla);
 	}
 	|  {
-		$$=[];
+		$$[0]=[];
 		var regla = new Regla("GRAMATICAL","ARREGLOS_ID_PRIMA-> ARREGLO_ID ARREGLOS_ID_PRIMA",""); ingresarRegla(regla);
 	}
 ;
 
 ARREGLO_ID:
 	corcheteAbierto OPERACIONES_ARREGLO corcheteCerrado{
-		$$ = new Predicado($2,@1.first_line, @1.first_column);
+			//AST
+		$$[1]=$2[1];
+		//CST
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= yy.idCST+' [label="'+'F'+'"];'+'\n';  
+		var hijo1 =++yy.idCST;										
+		yy.dotCST+= hijo1+' [label="'+'corcheteAbierto'+'"];'+'\n';			 
+		var hijo12 =++yy.idCST;										
+		yy.dotCST+= hijo12+' [label="'+'['+'"];'+'\n';				
+		var hijo2 =++yy.idCST;										
+		yy.dotCST+= hijo2+' [label="'+'corcheteCerrado'+'"];'+'\n';			
+		var hijo22 =++yy.idCST;										
+		yy.dotCST+= hijo22+' [label="'+']'+'"];'+'\n';				
+
+		yy.dotCST +=padre+'--'+hijo1+';'+'\n';						
+		yy.dotCST += padre+'--'+$2[2]+';'+'\n';	
+		yy.dotCST += padre+'--'+hijo2+';'+'\n';						
+		yy.dotCST += hijo1+'--'+hijo12+';'+'\n';			
+		yy.dotCST += hijo2+'--'+hijo22+';'+'\n';						
+		$$[2]=padre;
+
+		$$[0] = new Predicado($2[0],@1.first_line, @1.first_column);
 		var regla = new Regla("GRAMATICAL","ARREGLO_ID->  corcheteAbierto OPERACIONES_ARREGLO corcheteCerrado",""); ingresarRegla(regla);
 	}
 ;
 
+
 OPERACIONES_ARREGLO:
 	OPERACION_LOGICA{
-		$$ = $1;
-		var regla = new Regla("GRAMATICAL","OPERACIONES_ARREGLO->  OPERACION_LOGICA ",""); ingresarRegla(regla);
+		//AST
+		$$[1]=$1[1];
+		//CST
+		$$[2]=++yy.idCST;
+		yy.dotCST+= yy.idCST+' [label="'+'OPERACIONES_ARREGLO'+'"];'+'\n'; 
+		yy.dotCST += yy.idCST+'--'+$1[2]+';'+'\n';
+		$$[0] = $1[0];
+		var regla = new Regla("GRAMATICAL","OPERACIONES_ARREGLO->  OPERACION_LOGICA ","return OPERACION_LOGICA"); ingresarRegla(regla);
 	}
 	| OPERACION_RELACIONAL{
-		$$ = $1;
-		var regla = new Regla("GRAMATICAL","OPERACIONES_ARREGLO->  OPERACION_RELACIONAL ",""); ingresarRegla(regla);
+		//AST
+		$$[1]=$1[1];
+		//CST
+		$$[2]=++yy.idCST;
+		yy.dotCST+= yy.idCST+' [label="'+'OPERACIONES_ARREGLO'+'"];'+'\n'; 
+		yy.dotCST += yy.idCST+'--'+$1[2]+';'+'\n';
+
+		$$[0] = $1[0];
+		var regla = new Regla("GRAMATICAL","OPERACIONES_ARREGLO->  OPERACION_RELACIONAL ","return OPERACION_RELACIONAL"); ingresarRegla(regla);
 	}
 ;
-
 
 OPERACION_LOGICA:
 	OPERACION_RELACIONAL SIMBOLOS_LOGICOS OPERACION_RELACIONAL{
+		//AST=
+		yy.dotAST += $2[1]+'--'+$1[1]+';'+'\n';
+		yy.dotAST += $2[1]+'--'+$3[1]+';'+'\n';
+		//CST
+		$$[2]=++yy.idCST;OPERACION_LOGICA
+		yy.dotCST+= yy.idCST+' [label="'+'OPERACION_LOGICA'+'"];'+'\n'; 
+		yy.dotCST += yy.idCST+'--'+$1[2]+';'+'\n';
+		yy.dotCST += yy.idCST+'--'+$2[2]+';'+'\n';
+		yy.dotCST += yy.idCST+'--'+$3[2]+';'+'\n';
+
+		$$[0] = new OperacionLogica($1[0],$3[0],$2[2],@1.first_line, @1.first_column);
 		var regla = new Regla("GRAMATICAL","OPERACION_LOGICA->  OPERACION_RELACIONAL SIMBOLOS_LOGICOS OPERACION_RELACIONAL",""); ingresarRegla(regla);
-		$$ = new OperacionLogica($1,$3,$2,@1.first_line, @1.first_column);
 	}
 ;
 
+
 SIMBOLOS_LOGICOS:
 	and1{
-		$$ = Operador.AND;
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+$1+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'SIMBOLOS_LOGICOS'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'and1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+$1+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+		$$[0] = Operador.AND;
 		var regla = new Regla("GRAMATICAL","SIMBOLOS_LOGICOS->  and1",""); ingresarRegla(regla);
 	}
 	| or1{
-		$$ = Operador.OR;
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+$1+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'SIMBOLOS_LOGICOS'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'or1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+$1+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+
+		$$[0]= Operador.OR;
 		var regla = new Regla("GRAMATICAL","SIMBOLOS_LOGICOS->  or1",""); ingresarRegla(regla);
 	}
 ;
@@ -422,71 +1042,273 @@ SIMBOLOS_LOGICOS:
 
 OPERACION_RELACIONAL :
 		OPERACION_ARITMETICA SIMBOLOS_RELACIONALES OPERACION_ARITMETICA{
-		$$ = new OperacionRelacional($1,$3,$2,@1.first_line, @1.first_column);
+			yy.dotAST += $2[1]+'--'+$1[1]+';'+'\n';
+			yy.dotAST += $2[1]+'--'+$3[1]+';'+'\n';
+			$$[1]=$2[1];
+
+
+			var padre =++yy.idCST;
+			yy.dotCST+= padre+' [label="'+'OPERACION_ARITMETICA'+'"];'+'\n'; 
+			var hijo =++yy.idCST;
+			yy.dotCST+= hijo+' [label="'+'mas'+'"];'+'\n'; 
+			var hijo2 =++yy.idCST;
+			yy.dotCST+= hijo2+' [label="'+$2.yy.text+'"];'+'\n'; 
+			yy.dotCST += padre+'--'+$1[2]+';'+'\n';
+			yy.dotCST += padre+'--'+hijo+';'+'\n';
+			yy.dotCST += padre+'--'+$3[2]+';'+'\n';
+			yy.dotCST += hijo+'--'+hijo2+';'+'\n';
+			$$[2]=padre;
+
+
+		$$[0] = new OperacionRelacional($1[0],$3[0],$2[0],@1.first_line, @1.first_column);
 		var regla = new Regla("GRAMATICAL","OPERACION_RELACIONAL->  OPERACION_ARITMETICA SIMBOLOS_RELACIONALES OPERACION_ARITMETICA",""); ingresarRegla(regla);
 		}
 		|OPERACION_ARITMETICA{
-		$$ = $1;
+		//AST
+		$$[1]=$1[1];
+		//CST
+		$$[2]=++yy.idCST;
+		yy.dotCST+= yy.idCST+' [label="'+'OPERACION_RELACIONAL'+'"];'+'\n'; 
+		yy.dotCST += yy.idCST+'--'+$1[2]+';'+'\n';
+		$$[0] = $1[0];
 		var regla = new Regla("GRAMATICAL","OPERACION_RELACIONAL->  OPERACION_ARITMETICA",""); ingresarRegla(regla);
 		}
 ;
 
+
 SIMBOLOS_RELACIONALES:
 	mayorque{
-		$$ = Operador.MAYOR_QUE;
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'SIMBOLOS_RELACIONALES'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'mayorIgual'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+yy.text+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+
 		var regla = new Regla("GRAMATICAL","SIMBOLOS_RELACIONALES->  mayorque",""); ingresarRegla(regla);
 	}
 	| menorque{
-		$$ = Operador.MENOR_QUE;
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'SIMBOLOS_RELACIONALES'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'mayorIgual'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+yy.text+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
 		var regla = new Regla("GRAMATICAL","SIMBOLOS_RELACIONALES->  menorque",""); ingresarRegla(regla);
 	}
 	| mayorIgual{
-		$$ = Operador.MAYOR_IGUAL;
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'SIMBOLOS_RELACIONALES'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'mayorIgual'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+yy.text+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+
 		var regla = new Regla("GRAMATICAL","SIMBOLOS_RELACIONALES->  mayorIgual",""); ingresarRegla(regla);
 	}
 	| menorIgual{
-		$$ = Operador.MENOR_IGUAL;
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'SIMBOLOS_RELACIONALES'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'menorIgual'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+yy.text+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+
 		var regla = new Regla("GRAMATICAL","SIMBOLOS_RELACIONALES->  menorIgual",""); ingresarRegla(regla);
 	}
 	| igual{
-		$$ = Operador.IGUAL;
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'SIMBOLOS_RELACIONALES'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'igual'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+yy.text+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
 		var regla = new Regla("GRAMATICAL","SIMBOLOS_RELACIONALES->  igual",""); ingresarRegla(regla);
 	}
 	| diferenteQue{
-		$$ = Operador.DIFERENTE_QUE;
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'SIMBOLOS_RELACIONALES'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'diferenteQue'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+yy.text+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
 		var regla = new Regla("GRAMATICAL","SIMBOLOS_RELACIONALES->  diferenteQue",""); ingresarRegla(regla);
 	}
 ;
 
-
 OPERACION_ARITMETICA: 
 	OPERACION_ARITMETICA '+' OPERACION_ARITMETICA
-		{$$ = new OperacionAritmetica($1,$3,Operador.SUMA,@1.first_line, @1.first_column);
+		{
+			var padre1 =++yy.idAST;
+			yy.dotAST+= padre1+' [label="'+'+'+'"];'+'\n'; 
+			yy.dotAST += padre1+'--'+$1[1]+';'+'\n';
+			yy.dotAST += padre1+'--'+$3[1]+';'+'\n';
+			$$[1]=padre;
+
+			var padre =++yy.idCST;
+			yy.dotCST+= padre+' [label="'+'OPERACION_ARITMETICA'+'"];'+'\n'; 
+			var hijo =++yy.idCST;
+			yy.dotCST+= hijo+' [label="'+'+'+'"];'+'\n'; 
+			yy.dotCST += padre+'--'+$1[2]+';'+'\n';
+			yy.dotCST += padre+'--'+hijo+';'+'\n';
+			yy.dotCST += padre+'--'+$3[2]+';'+'\n';
+			$$[2]=padre;
+			
+		$$[0] = new OperacionAritmetica($1[0],$3[0],Operador.SUMA,@1.first_line, @1.first_column);
 		var regla = new Regla("GRAMATICAL","OPERACION_ARITMETICA-> OPERACION_ARITMETICA mas OPERACION_ARITMETICA","retorna nueva operacion aritmetica suma; "); ingresarRegla(regla);
 		}
     | OPERACION_ARITMETICA '-' OPERACION_ARITMETICA
-		{$$ = new OperacionAritmetica($1,$3,Operador.RESTA,@1.first_line, @1.first_column);
+		{
+			var padre1 =++yy.idAST;
+			yy.dotAST+= padre1+' [label="'+'-'+'"];'+'\n'; 
+			yy.dotAST += padre1+'--'+$1[1]+';'+'\n';
+			yy.dotAST += padre1+'--'+$3[1]+';'+'\n';
+			$$[1]=padre;
+
+			var padre =++yy.idCST;
+			yy.dotCST+= padre+' [label="'+'OPERACION_ARITMETICA'+'"];'+'\n'; 
+			var hijo =++yy.idCST;
+			yy.dotCST+= hijo+' [label="'+'-'+'"];'+'\n'; 
+			yy.dotCST += padre+'--'+$1[2]+';'+'\n';
+			yy.dotCST += padre+'--'+hijo+';'+'\n';
+			yy.dotCST += padre+'--'+$3[2]+';'+'\n';
+			$$[2]=padre;
+
+		$$[0] = new OperacionAritmetica($1[0],$3[0],Operador.RESTA,@1.first_line, @1.first_column);
 		var regla = new Regla("GRAMATICAL","OPERACION_ARITMETICA-> OPERACION_ARITMETICA menos OPERACION_ARITMETICA","retorna nueva operacion aritmetica resta; "); ingresarRegla(regla);
 		}
     | OPERACION_ARITMETICA asterisco OPERACION_ARITMETICA
-		{$$ = new OperacionAritmetica($1,$3,Operador.MULTIPLICACION,@1.first_line, @1.first_column);
+		{
+			var padre1 =++yy.idAST;
+			yy.dotAST+= padre1+' [label="'+'*'+'"];'+'\n'; 
+			yy.dotAST += padre1+'--'+$1[1]+';'+'\n';
+			yy.dotAST += padre1+'--'+$3[1]+';'+'\n';
+			$$[1]=padre;
+
+			var padre =++yy.idCST;
+			yy.dotCST+= padre+' [label="'+'OPERACION_ARITMETICA'+'"];'+'\n'; 
+			var hijo =++yy.idCST;
+			yy.dotCST+= hijo+' [label="'+'*'+'"];'+'\n'; 
+			yy.dotCST += padre+'--'+$1[2]+';'+'\n';
+			yy.dotCST += padre+'--'+hijo+';'+'\n';
+			yy.dotCST += padre+'--'+$3[2]+';'+'\n';
+			$$[2]=padre;
+
+		$$ = new OperacionAritmetica($1[0],$3[0],Operador.MULTIPLICACION,@1.first_line, @1.first_column);
 		var regla = new Regla("GRAMATICAL","OPERACION_ARITMETICA-> OPERACION_ARITMETICA dividir OPERACION_ARITMETICA","retorna nueva operacion aritmetica division; "); ingresarRegla(regla);
 		}
     | OPERACION_ARITMETICA dividir OPERACION_ARITMETICA
-		{$$ = new OperacionAritmetica($1,$3,Operador.DIVISION,@1.first_line, @1.first_column);
-		var regla = new Regla("GRAMATICAL","OPERACION_ARITMETICA-> parizq OPERACION_ARITMETICA parder","retorna operacionAritmetica;"); ingresarRegla(regla);
+		{	
+			var padre1 =++yy.idAST;
+			yy.dotAST+= padre1+' [label="'+'/'+'"];'+'\n'; 
+			yy.dotAST += padre1+'--'+$1[1]+';'+'\n';
+			yy.dotAST += padre1+'--'+$3[1]+';'+'\n';
+			$$[1]=padre;
+
+			var padre =++yy.idCST;
+			yy.dotCST+= padre+' [label="'+'OPERACION_ARITMETICA'+'"];'+'\n'; 
+			var hijo =++yy.idCST;
+			yy.dotCST+= hijo+' [label="'+'/'+'"];'+'\n'; 
+			yy.dotCST += padre+'--'+$1[2]+';'+'\n';
+			yy.dotCST += padre+'--'+hijo+';'+'\n';
+			yy.dotCST += padre+'--'+$3[2]+';'+'\n';
+			$$[2]=padre;
+			
+			$$[0] = new OperacionAritmetica($1[0],$3[0],Operador.DIVISION,@1.first_line, @1.first_column);
+			var regla = new Regla("GRAMATICAL","OPERACION_ARITMETICA-> parizq OPERACION_ARITMETICA parder","retorna operacionAritmetica;"); ingresarRegla(regla);
 		}
     | OPERACION_ARITMETICA modulo OPERACION_ARITMETICA
-		{$$ = new OperacionAritmetica($1,$3,Operador.MODULO,@1.first_line, @1.first_column);
+		{
+			var padre1 =++yy.idAST;
+			yy.dotAST+= padre1+' [label="'+'%'+'"];'+'\n'; 
+			yy.dotAST += padre1+'--'+$1[1]+';'+'\n';
+			yy.dotAST += padre1+'--'+$3[1]+';'+'\n';
+			$$[1]=padre;
+
+			var padre =++yy.idCST;
+			yy.dotCST+= padre+' [label="'+'OPERACION_ARITMETICA'+'"];'+'\n'; 
+			var hijo =++yy.idCST;
+			yy.dotCST+= hijo+' [label="'+'%'+'"];'+'\n'; 
+			yy.dotCST += padre+'--'+$1[2]+';'+'\n';
+			yy.dotCST += padre+'--'+hijo+';'+'\n';
+			yy.dotCST += padre+'--'+$3[2]+';'+'\n';
+			$$[2]=padre;
+			
+		$$[0] = new OperacionAritmetica($1[0],$3[0],Operador.MODULO,@1.first_line, @1.first_column);
 		var regla = new Regla("GRAMATICAL","OPERACION_ARITMETICA-> OPERACION_ARITMETICA modulo OPERACION_ARITMETICA","retorna nueva operacion\n aritmetica modulo"); ingresarRegla(regla);
 		}
     | parizq OPERACION_ARITMETICA parder
-		{$$ = $2; 
+		{
+		$$[1]=$2[1];
+		//CST
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= yy.idCST+' [label="'+'F'+'"];'+'\n';  
+		var hijo1 =++yy.idCST;										
+		yy.dotCST+= hijo1+' [label="'+'parizq'+'"];'+'\n';			 
+		var hijo12 =++yy.idCST;										
+		yy.dotCST+= hijo12+' [label="'+'('+'"];'+'\n';				
+		var hijo2 =++yy.idCST;										
+		yy.dotCST+= hijo2+' [label="'+'parder'+'"];'+'\n';			
+		var hijo22 =++yy.idCST;										
+		yy.dotCST+= hijo22+' [label="'+')'+'"];'+'\n';				
+
+		yy.dotCST +=padre+'--'+hijo1+';'+'\n';						
+		yy.dotCST += padre+'--'+$2[2]+';'+'\n';	
+		yy.dotCST += padre+'--'+hijo2+';'+'\n';						
+		yy.dotCST += hijo1+'--'+hijo12+';'+'\n';			
+		yy.dotCST += hijo2+'--'+hijo22+';'+'\n';						
+		$$[2]=padre;
+
+		$$[0] = $2[0]; 
 		var regla = new Regla("GRAMATICAL","OPERACION_ARITMETICA-> parizq OPERACION_ARITMETICA parder","retorna operacionAritmetica;"); ingresarRegla(regla);
 		}
     | TIPOIGUALAR
-		{$$ = $1; 
-		var regla = new Regla("GRAMATICAL","OPERACION_ARITMETICA-> TIPOIGUALAR","retorna tipoIgualar; "); ingresarRegla(regla);
+
+		{
+			$$[1]=$1[1];
+
+			$$[2]=++yy.idCST;
+			yy.dotCST+= yy.idCST+' [label="'+'F'+'"];'+'\n'; 
+			yy.dotCST += yy.idCST+'--'+$1[2]+';'+'\n';
+	
+			$$[0] = $1[0]; 
+			var regla = new Regla("GRAMATICAL","OPERACION_ARITMETICA-> TIPOIGUALAR","retorna tipoIgualar; "); ingresarRegla(regla);
 		}
 ;
 
@@ -494,31 +1316,103 @@ OPERACION_ARITMETICA:
 
 TIPOIGUALAR:
 	entero{
-		$$ = new Dato(Number($1), @1.first_line, @1.first_column);
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+$1+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= padre+' [label="'+'TIPO_IGUALAR'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'entero'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+$1+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+
+		$$[0] = new Dato(Number($1), @1.first_line, @1.first_column);
 		var regla = new Regla("GRAMATICAL","TIPOIGUALAR-> entero","retorna nevo dato entero;"); ingresarRegla(regla);
 	}
 	| decimal {
-		$$ = new Dato(Number($1), @1.first_line, @1.first_column); 
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+$1+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= yy.padre+' [label="'+'TIPO_IGUALAR'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'decimal'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+$1+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre; 
+		$$[0] = new Dato(Number($1), @1.first_line, @1.first_column); 
 		var regla = new Regla("GRAMATICAL","TIPOIGUALAR-> decimal","retorna nuevo dato decimal;"); ingresarRegla(regla);
 
 	}
 	| arroba SIGUIENTE_ARROBA{
-		$$ = new Arroba($2, @1.first_line, @1.first_column);
+		var padre2 =++yy.idAST;
+		yy.dotAST+= padre2+' [label="'+'SIMBOLOS'+'"];'+'\n'; 
+		var hijo =++yy.idAST;
+		yy.dotAST+= hijo+' [label="'+'arroba'+$2[0].getValor()+'"];'+'\n'; 
+
+		yy.dotAST += padre2+'--'+hijo+';'+'\n';
+		yy.dotAST += padre2+'--'+$2[1]+';'+'\n';
+		$$[1]=padre2;
+		
+		
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= yy.idCST+' [label="'+'TIPOIGUALAR'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'arroba'+'"];'+'\n';			// yydotCST += 6 [label='arroba'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+'@'+'"];'+'\n';				// yydotCST += 7 [label='@'];
+
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += padre+'--'+$2[2]+';'+'\n';						//	yydotCST+= 5 -- 4
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotcst+= 6 -- 7
+		$$[2]=padre;
+
+		$$[0] = new Arroba($2, @1.first_line, @1.first_column);
 		var regla = new Regla("GRAMATICAL","TIPOIGUALAR-> SIGUIENTE_ARROBA","retira nueva arroba;"); ingresarRegla(regla);
 
 	}
 	| cadena{
-		$$ = new Dato($1, @1.first_line, @1.first_column);
+		$$[1]=++yy.idAST;
+		yy.dotAST+= yy.idAST+' [label="'+$1+'"];'+'\n'; 
+
+		var padre=++yy.idCST;//padre = 5;
+		yy.dotCST+= yy.idCST+' [label="'+'TIPO_IGUALAR'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+		var hijo =++yy.idCST;										// hijo = 6; 
+		yy.dotCST+= hijo+' [label="'+'cadena'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+		var hijo2 =++yy.idCST;										// hijo2 = 7; 
+		yy.dotCST+= hijo2+' [label="'+$1+'"];'+'\n';				// yydotCST += 7 [label='@'];
+		yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+		yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+		$$[2]= padre;
+
+		$$[0] = new Dato($1, @1.first_line, @1.first_column);
 		var regla = new Regla("GRAMATICAL","TIPOIGUALAR-> cadena",""); ingresarRegla(regla);
 
 	}
 	| CONSULTAS{
-		 $$ = $1;
+		$$[1]=$1[1];
+
+		$$[2]=++yy.idCST;
+		yy.dotCST+= yy.idCST+' [label="'+'TIPO_IGUALAR'+'"];'+'\n'; 
+		yy.dotCST += yy.idCST+'--'+$1[2]+';'+'\n';
+
+		$$[0] = $1[0];
 		var regla = new Regla("GRAMATICAL","TIPOIGUALAR-> CONSULTAS",""); ingresarRegla(regla);
 
 	}
 	| METODOS{
-		$$ = $1; 
+		$$[1]=$1[1];
+
+		$$[2]=++yy.idCST;
+		yy.dotCST+= yy.idCST+' [label="'+'TIPO_IGUALAR'+'"];'+'\n'; 
+		yy.dotCST += yy.idCST+'--'+$1[2]+';'+'\n';
+
+		$$[0] = $1[0]; 
 		var regla = new Regla("GRAMATICAL","TIPOIGUALAR-> METODOS",""); ingresarRegla(regla);
 	}
 ;
