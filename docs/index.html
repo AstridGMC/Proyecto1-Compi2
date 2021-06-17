@@ -82,6 +82,7 @@
                             </div>
                             <form action="./Frontend/tablaSimbolos.html" method="get">
                                 <input hidden id="tabErrores" name="simbolostb"/>
+                                <input hidden id="tabSimbolosXML" name="tabSimbolosXML"/>
                                     <a><input style="background-color: Transparent; color:white; border: none;" type="submit" value="Tabla de Simbolos"></a>
                             </form>
                             <form action="./Frontend/tabGramatical.html" method="get">
@@ -112,10 +113,10 @@
                     <h2 style="background-color: rgb(8, 49, 68); color:white; margin-top: 20px;">Entrada</h2>
 
                     <textarea style="width: 100%; height: 400px; font-size: 20px;" id="editor"></textarea>
-                    <button type="button" class="btn btn-light btn_blue" id="ascendente"><img
+                    <button type="button" class="btn btn-light btn_blue"  onclick="analisisAsc()" id="ascendente"><img
                             src="./css/imagenes/asc.png" />
                         Analizar XML Ascendente </button>
-                    <button type="button" class="btn btn-light btn_blue" id="descendente"><img
+                    <button type="button" class="btn btn-light btn_blue"  onclick="analisisDesc()" id="descendente"><img
                             src="./css/imagenes/desc.png" />
                         Analizar XML Descendente </button>
                 </div>
@@ -158,7 +159,7 @@
     <script type="text/javascript" src="Scripts/clasesXML/ObjetoNodo.js"></script>
     <script type="text/javascript" src="Scripts/clasesXML/Atributo.js"></script>
     <script type="text/javascript" src="Scripts/Errores/Error.js"></script>
-    <script type="text/javascript" src="Gramaticas/xml/gramarxml.js"></script>
+    <script type="text/javascript" src="./Scripts/Gramaticas/xml/gramarxml.js"></script>
     <script type="text/javascript" src="./Scripts/Arboles/Regla.js"></script>
     <script src="./Scripts/Gramaticas/xml/gramarxmldes.js"></script>
     <script src="./Gramaticas/xml/funcionesParseo.js"></script>
@@ -170,39 +171,39 @@
             var btnXML = document.getElementById("ascendente");
             inputElement.addEventListener("onclick", leerArchivo, false);
 
-            $('#ascendente').click(function () {
+            function analisisAsc(){
                 // Recupera el contenido del js especificado para tener acceso a funciones definidas en: define()
-                requirejs(['./Scripts/Gramaticas/xml/gramarxml.js'],
-                    function (grammarXML) {
+                requirejs(['grammarXMLAsc'],
+                    function (grammarXMLAsc) {
                         erroresGramar = [];
                         var entrada =  editor.getValue();
                         if (entrada.length >= 0) {
-                            var xmlAST = grammarXML.getParser().parse(entrada);
+                            var xmlAST = grammarXMLAsc.getParser().parse(entrada);
                             llenarTablaErrores();
                             llenarTablaGramatical();
+                            document.getElementById('tabSimbolosXML').setAttribute('value',JSON.stringify(xmlAST));
                         } else {
                             alert("EL ARCHIVO DE ENTRADA ESTA VACIO\n");
                         }
                     });
-            });
+            }
 
-            $('#descendente').click(function () {
+            function analisisDesc(){
                 // Recupera el contenido del js especificado para tener acceso a funciones definidas en: define()
-                requirejs(['./Scripts/Gramaticas/xml/gramarxmldes.js'],
-                    function (gramarxmlDes) {
+                requirejs(['grammarXMLDesc'],
+                    function (grammarXMLDesc) {
                         erroresGramar = [];
                         var entrada =  editor.getValue();
                         console.log(entrada);
                         if (entrada.length >= 0) {
-                            var xmldesAST = gramarxmlDes.getParser().parse(entrada);
+                            var xmldesAST = grammarXMLDesc.getParser().parse(entrada);
                             llenarTablaErrores();
                             llenarTablaGramatical();
                         } else {
                             alert("EL ARCHIVO DE ENTRADA ESTA VACIO\n");
                         }
                     });
-
-            });
+            }
 
     </script>
 </body>
