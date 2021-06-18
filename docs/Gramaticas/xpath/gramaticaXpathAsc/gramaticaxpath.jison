@@ -1,5 +1,13 @@
 
 %{
+
+		define('grammarXPATH',function () {
+			return {
+				getParser: function () {
+					return gramaticaxpath;
+				}
+			};
+		});
 	const {Error} = require('../../Scripts/Errores/Error.js');
 	var erroresLexicos = [];
 	var variables=[];
@@ -114,34 +122,25 @@
 
 
 	//Importaciones 
-%{	define('gramaticaxpath',function () {
-        return {
-            getParser: function () {
-                return gramaticaxpath;
-            }
-        };
-    });
+%{	
+	
 
-	const {Dato} = require("./Scripts/ClasesXpath/Dato");
-	const {OperacionAritmetica} = require("./Scripts/ClasesXpath/OperacionAritmetica");
-	const {Operador} = require("./Scripts/ClasesXpath/Operador");
-	const {OperacionRelacional} = require("./Scripts/ClasesXpath/OperacionRelacional");
-	const {OperacionLogica} = require("./Scripts/ClasesXpath/OperacionLogica");
-	const {Predicado} = require("./Scripts/ClasesXpath/Predicado");
-	const {IdSimple} = require("./Scripts/ClasesXpath/IdSimple");
-	const {IdCompuesto} = require("./Scripts/ClasesXpath/IdCompuesto");
-	const {SimbolosXpath} = require("./Scripts/ClasesXpath/SimbolosXpath");
-	const {TiposXpath} = require("./Scripts/ClasesXpath/TiposXpath");
-	const {Metodo} = require("./Scripts/ClasesXpath/Metodo");
-	const {Funcion} = require("./Scripts/ClasesXpath/Funcion");
-	const {Arroba} = require("./Scripts/ClasesXpath/Arroba");
-	const {diagonalDobleC} = require("./Scripts/ClasesXpath/diagonalDobleC");
-	const {diagonalSimpleS} = require("./Scripts/ClasesXpath/diagonalSimpleS");
-	const {Error} = require('../../../Scripts/Errores/Error.js');
-    const {Regla} = require("../../../Scripts/Arboles/Regla");
-    //const {ObjetoNodo} = require("../../Scripts/Arboles/ObjetoNodo");
-    //const {Atributo} = require("../../Scripts/clasesXML/Atributo");
-	//const {Nodo} = require("../../Scripts/clasesXML/Nodo");\
+
+	const {Dato} = require("../../../Scripts/ClasesXpath/Dato");
+	const {OperacionAritmetica} = require("../../../Scripts/ClasesXpath/OperacionAritmetica");
+	const {Operador} = require("../../../Scripts/ClasesXpath/Operador");
+	const {OperacionRelacional} = require("../../../Scripts/ClasesXpath/OperacionRelacional");
+	const {OperacionLogica} = require("../../../Scripts/ClasesXpath/OperacionLogica");
+	const {Predicado} = require("../../../Scripts/ClasesXpath/Predicado");
+	const {IdSimple} = require("../../../Scripts/ClasesXpath/IdSimple");
+	const {IdCompuesto} = require("../../../Scripts/ClasesXpath/IdCompuesto");
+	const {SimbolosXpath} = require("../../../Scripts/ClasesXpath/SimbolosXpath");
+	const {TiposXpath} = require("../../../Scripts/ClasesXpath/TiposXpath");
+	const {Metodo} = require("../../../Scripts/ClasesXpath/Metodo");
+	const {Funcion} = require("../../../Scripts/ClasesXpath/Funcion");
+	const {Arroba} = require("../../../Scripts/ClasesXpath/Arroba");
+	const {diagonalDobleC} = require("../../../Scripts/ClasesXpath/diagonalDobleC");
+	const {diagonalSimpleS} = require("../../../Scripts/ClasesXpath/diagonalSimpleS"); 
 	var AUXid=0;
 	
 	

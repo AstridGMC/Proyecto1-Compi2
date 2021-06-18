@@ -603,7 +603,7 @@ _handle_error:
             return gramarxmldes;
         }
     };
-});
+    });
     //const {Primitivo} = require("../../Scripts/Arboles/Primitivo");
     //const {ObjetoNodo} = require("../../Scripts/Arboles/ObjetoNodo");
     //const {Atributo} = require("../../Scripts/clasesXML/Atributo");

@@ -1,5 +1,13 @@
 
 /********************************************************* LEXICO  *****************************************************/
+%{
+	const {Error} = require('../../Scripts/Errores/Error.js');
+	var erroresLexicos = [];
+	var variables=[];
+	var erroresSintacticos = [];
+	var errorSemantico=[];
+	
+%}
 
 %lex
 
@@ -90,13 +98,18 @@
 
 %{
 
-	define('gramaticaXpathDesc',function () {
-        return {
-            getParser: function () {
-                return gramaticaXpathDesc;
-            }
-        };
-    });
+	
+
+	function unirErrores(){
+		erroresGramar[0]= erroresLexicos ;
+		erroresGramar[1]= erroresSintacticos;
+		erroresGramar[2]=errorSemantico;
+		
+		console.log(erroresGramar.length);
+		console.log(erroresGramar[0].length+'errores lexicos');
+		console.log(erroresGramar[1].length+'errores sintacticos');
+		console.log(erroresGramar[2].length +'errores semanticos');
+	}
 
 	const {Dato} = require("../../../Scripts/ClasesXpath/Dato");
 	const {OperacionAritmetica} = require("../../../Scripts/ClasesXpath/OperacionAritmetica");
@@ -115,6 +128,8 @@
 	const {diagonalSimpleS} = require("../../../Scripts/ClasesXpath/diagonalSimpleS");
 
 	var aux =0;
+
+	
 %}
 
 /********************************************************* SINTACTICO DESCENDENTE *****************************************************/
