@@ -73,7 +73,11 @@
 
 <<EOF>>                 return 'EOF';
 
-.                       { console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }
+.                       { 
+						console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); 
+						var error =  new Error( this._$.first_line ,  this._$.first_column, 'lexico','xmldesc', yytext);
+						erroresLexicos.push(error);
+						}
 /lex
 
 //SECCION DE IMPORTS

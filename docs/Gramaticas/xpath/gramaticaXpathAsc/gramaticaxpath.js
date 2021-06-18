@@ -1751,28 +1751,18 @@ _handle_error:
 
     return true;
 }};
-
-
-		define('grammarXPATH',function () {
+define('grammarXPATH',function () {
 			return {
 				getParser: function () {
 					return gramaticaxpath;
 				}
 			};
 		});
-	const {Error} = require('../../Scripts/Errores/Error.js');
 	var erroresLexicos = [];
 	var variables=[];
 	var erroresSintacticos = [];
 	var errorSemantico=[];
 	
-
-	var erroresLexicos = [];
-	var variables=[];
-	var erroresSintacticos = [];
-	var errorSemantico=[];
-	var reglas=[];
-	var erroresGramar = [];
 	
 	
 

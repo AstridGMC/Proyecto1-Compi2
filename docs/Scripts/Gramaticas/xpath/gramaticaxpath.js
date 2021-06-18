@@ -1758,13 +1758,6 @@ var gramaticaxpath = (function(){
 		var erroresSintacticos = [];
 		var errorSemantico=[];
 		
-	
-		var erroresLexicos = [];
-		var variables=[];
-		var erroresSintacticos = [];
-		var errorSemantico=[];
-		var reglas=[];
-		var erroresGramar = [];
 		
 		
 	
