@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OperacionAritmetica = void 0;
-var Operador_1 = require("./Operador");
-var TiposXpath_1 = require("./TiposXpath");
+//var Operador_1 = require("./Operador");
+//var TiposXpath_1 = require("./TiposXpath");
 var OperacionAritmetica = /** @class */ (function () {
     function OperacionAritmetica(op_izquierda, op_derecha, operacion, linea, columna) {
         this.linea = linea;
@@ -11,7 +11,7 @@ var OperacionAritmetica = /** @class */ (function () {
         this.op_derecha = op_derecha;
         this.operador = operacion;
     }
-    OperacionAritmetica.prototype.getTipo = function (arbol) {
+    /*OperacionAritmetica.prototype.getTipo = function (arbol) {
         //asignamos el tipo segun sea el typo de valor .
         var valor = this.getValorImplicito(arbol);
         if (typeof (valor) === 'boolean') {
@@ -30,8 +30,8 @@ var OperacionAritmetica = /** @class */ (function () {
             return TiposXpath_1.TiposXpath.NULL;
         }
         return TiposXpath_1.TiposXpath.VOID;
-    };
-    OperacionAritmetica.prototype.getValorImplicito = function (arbol) {
+    };*/
+    /*OperacionAritmetica.prototype.getValorImplicito = function (arbol) {
         if (this.operador !== Operador_1.Operador.MENOS_UNARIO && this.operador !== Operador_1.Operador.NOT) {
             var op1 = this.op_izquierda.getValorImplicito(arbol);
             var op2 = this.op_derecha.getValorImplicito(arbol);
@@ -118,7 +118,7 @@ var OperacionAritmetica = /** @class */ (function () {
             }
         }
         return null;
-    };
+    };*/
     OperacionAritmetica.prototype.isInt = function (n) {
         return Number(n) === n && n % 1 === 0;
     };

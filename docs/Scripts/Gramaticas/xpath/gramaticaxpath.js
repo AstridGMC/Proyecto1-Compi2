@@ -164,9 +164,9 @@ var gramaticaxpath = (function(){
 			yy.dotCST += yy.idCST+'--'+$$[$0-1][2]+';'+'\n';
 			yy.dotCST += yy.idCST+'--'+$$[$0][2]+';'+'\n';
 			//reglas gram
-			$$[$0-1][0].push($$[$0][0]); 
-			this.$[0] = $$[$0-1][0];
-			var regla = new Regla("GRAMATICAL","CONSULTA-> CONSULTAS CONSULTA",""); ingresarRegla(regla);
+			//$$[$0-1][0].push($$[$0][0]); 
+			//this.$[0] = $$[$0-1][0];
+			//var regla = new Regla("GRAMATICAL","CONSULTA-> CONSULTAS CONSULTA",""); ingresarRegla(regla);
 			
 	break;
 	case 6:
@@ -1751,15 +1751,8 @@ var gramaticaxpath = (function(){
 	
 		return true;
 	}};
-	define('grammarXPATH',function () {
-		return {
-			getParser: function () {
-				return gramaticaxpath;
-			}
-		};
-	});
 	 
-		const {Error} = require('../../Scripts/Errores/Error.js');
+		//const {Error} = require('../../Scripts/Errores/Error.js');
 		var erroresLexicos = [];
 		var variables=[];
 		var erroresSintacticos = [];
@@ -1776,27 +1769,27 @@ var gramaticaxpath = (function(){
 		
 	
 	
-		const {Dato} = require("../../../Scripts/ClasesXpath/Dato");
-		const {OperacionAritmetica} = require("../../../Scripts/ClasesXpath/OperacionAritmetica");
-		const {Operador} = require("../../../Scripts/ClasesXpath/Operador");
-		const {OperacionRelacional} = require("../../../Scripts/ClasesXpath/OperacionRelacional");
-		const {OperacionLogica} = require("../../../Scripts/ClasesXpath/OperacionLogica");
-		const {Predicado} = require("../../../Scripts/ClasesXpath/Predicado");
-		const {IdSimple} = require("../../../Scripts/ClasesXpath/IdSimple");
-		const {IdCompuesto} = require("../../../Scripts/ClasesXpath/IdCompuesto");
-		const {SimbolosXpath} = require("../../../Scripts/ClasesXpath/SimbolosXpath");
-		const {TiposXpath} = require("../../../Scripts/ClasesXpath/TiposXpath");
-		const {Metodo} = require("../../../Scripts/ClasesXpath/Metodo");
-		const {Funcion} = require("../../../Scripts/ClasesXpath/Funcion");
-		const {Arroba} = require("../../../Scripts/ClasesXpath/Arroba");
-		const {diagonalDobleC} = require("../../../Scripts/ClasesXpath/diagonalDobleC");
-		const {diagonalSimpleS} = require("../../../Scripts/ClasesXpath/diagonalSimpleS"); 
+		//const {Dato} = require("../../../Scripts/ClasesXpath/Dato");
+		//const {OperacionAritmetica} = require("../../../Scripts/ClasesXpath/OperacionAritmetica");
+		//const {Operador} = require("../../../Scripts/ClasesXpath/Operador");
+		//const {OperacionRelacional} = require("../../../Scripts/ClasesXpath/OperacionRelacional");
+		//const {OperacionLogica} = require("../../../Scripts/ClasesXpath/OperacionLogica");
+		//const {Predicado} = require("../../../Scripts/ClasesXpath/Predicado");
+		//const {IdSimple} = require("../../../Scripts/ClasesXpath/IdSimple");
+		//const {IdCompuesto} = require("../../../Scripts/ClasesXpath/IdCompuesto");
+		//const {SimbolosXpath} = require("../../../Scripts/ClasesXpath/SimbolosXpath");
+		//const {TiposXpath} = require("../../../Scripts/ClasesXpath/TiposXpath");
+		//const {Metodo} = require("../../../Scripts/ClasesXpath/Metodo");
+		//const {Funcion} = require("../../../Scripts/ClasesXpath/Funcion");
+		//const {Arroba} = require("../../../Scripts/ClasesXpath/Arroba");
+		//const {diagonalDobleC} = require("../../../Scripts/ClasesXpath/diagonalDobleC");
+		//const {diagonalSimpleS} = require("../../../Scripts/ClasesXpath/diagonalSimpleS"); 
 		var AUXid=0;
 		
 		
 		
-		const {Error} = require('../../../Scripts/Errores/Error.js');
-		const {Regla} = require("../../../Scripts/Arboles/Regla");
+		//const {Error} = require('../../../Scripts/Errores/Error.js');
+		//const {Regla} = require("../../../Scripts/Arboles/Regla");
 		//const {ObjetoNodo} = require("../../Scripts/Arboles/ObjetoNodo");
 		//const {Atributo} = require("../../Scripts/clasesXML/Atributo");
 		//const {Nodo} = require("../../Scripts/clasesXML/Nodo");\
@@ -2309,3 +2302,13 @@ var gramaticaxpath = (function(){
 	  exports.main(process.argv.slice(1));
 	}
 	}
+
+
+
+	define('gramaticaxpath',function () {
+		return {
+			getParser: function () {
+				return gramaticaxpath;
+			}
+		};
+	});

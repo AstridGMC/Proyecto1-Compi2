@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OperacionRelacional = void 0;
-var Operador_1 = require("./Operador");
-var TiposXpath_1 = require("./TiposXpath");
+//var Operador_1 = require("./Operador");
+//var TiposXpath_1 = require("./TiposXpath");
 var OperacionRelacional = /** @class */ (function () {
     function OperacionRelacional(op_izquierda, op_derecha, operacion, linea, columna) {
         this.linea = linea;
@@ -11,7 +11,7 @@ var OperacionRelacional = /** @class */ (function () {
         this.op_derecha = op_derecha;
         this.operador = operacion;
     }
-    OperacionRelacional.prototype.getTipo = function (arbol) {
+    /*OperacionRelacional.prototype.getTipo = function (arbol) {
         //verificas si es un simple dato o una funcion
         var valor = this.getValorImplicito(arbol);
         if (typeof (valor) === 'boolean') {
@@ -33,8 +33,8 @@ var OperacionRelacional = /** @class */ (function () {
             //puede ser funcion
         }
         return TiposXpath_1.TiposXpath.VOID;
-    };
-    OperacionRelacional.prototype.getValorImplicito = function (arbol) {
+    };*/
+    /*OperacionRelacional.prototype.getValorImplicito = function (arbol) {
         //tomar en cuenta que pueden venir datos simples o funciones.
         //en caso sea de tipo funcion 
         //en caso sea de tipo simple 
@@ -111,7 +111,7 @@ var OperacionRelacional = /** @class */ (function () {
             }
         }
         return null;
-    };
+    };*/
     OperacionRelacional.prototype.isInt = function (n) {
         return Number(n) === n && n % 1 === 0;
     };
