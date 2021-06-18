@@ -122,7 +122,7 @@
                 </div>
                 <div style="width:48%; padding-right: 5%; float:right;">
 
-                    <button type="button" class="btn btn-light btn_blue" onclick="analisisDescXPATH()"><img src="./css/imagenes/asc.png" />
+                    <button type="button" class="btn btn-light btn_blue" onclick="analisisXPATH()"><img src="./css/imagenes/asc.png" />
                         Analizar Ascendente </button>
                     <button type="button" class="btn btn-light btn_blue" onclick="analisisDescXPATH()"><img
                             src="./css/imagenes/desc.png" />
@@ -202,7 +202,7 @@
                     });
             }
 
-            function analisisAscXPATH(){
+            function analisisXPATH(){
                 // Recupera el contenido del js especificado para tener acceso a funciones definidas en: define()
                 requirejs(['grammarXPATH'],
                     function (grammarXPATH) {

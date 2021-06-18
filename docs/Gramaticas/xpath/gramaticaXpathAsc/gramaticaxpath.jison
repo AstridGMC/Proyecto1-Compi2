@@ -1,11 +1,13 @@
 
-%{define('grammarXPATH',function () {
+%{
+	define('grammarXPATH',function () {
 			return {
 				getParser: function () {
 					return gramaticaxpath;
 				}
 			};
 		});
+		
 	var erroresLexicos = [];
 	var variables=[];
 	var erroresSintacticos = [];
