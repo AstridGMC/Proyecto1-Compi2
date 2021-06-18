@@ -1752,26 +1752,17 @@ var gramaticaxpath = (function(){
 		return true;
 	}};
 	define('grammarXPATH',function () {
-		return {
-			getParser: function () {
-				return gramaticaxpath;
-			}
-		};
-	});
-	 
-		const {Error} = require('../../Scripts/Errores/Error.js');
+				return {
+					getParser: function () {
+						return gramaticaxpath;
+					}
+				};
+			});
 		var erroresLexicos = [];
 		var variables=[];
 		var erroresSintacticos = [];
 		var errorSemantico=[];
 		
-	
-		var erroresLexicos = [];
-		var variables=[];
-		var erroresSintacticos = [];
-		var errorSemantico=[];
-		var reglas=[];
-		var erroresGramar = [];
 		
 		
 	

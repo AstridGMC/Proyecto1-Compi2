@@ -1,14 +1,11 @@
 
-%{
-
-		define('grammarXPATH',function () {
+%{define('grammarXPATH',function () {
 			return {
 				getParser: function () {
 					return gramaticaxpath;
 				}
 			};
 		});
-	const {Error} = require('../../Scripts/Errores/Error.js');
 	var erroresLexicos = [];
 	var variables=[];
 	var erroresSintacticos = [];
@@ -17,14 +14,7 @@
 %}
 
 /********************************************************* LEXICO *****************************************************/
-%{
-	var erroresLexicos = [];
-	var variables=[];
-	var erroresSintacticos = [];
-	var errorSemantico=[];
-	var reglas=[];
-	var erroresGramar = [];
-%}
+
  
 %lex
 %{
@@ -123,7 +113,7 @@
 
 	//Importaciones 
 %{	
-	
+	var etiquetas=[];
 
 
 	const {Dato} = require("../../../Scripts/ClasesXpath/Dato");
@@ -284,9 +274,9 @@ CONSULTAS:
 	|
 	error diagonales
 		{
-			console.error('Este es un error Sintactico: ' + yytext + ', en la linea: ' + @1.first_line + ', en la columna: ' + @1.first_column); 
-			var erroresSint = new Error(@1.first_line, @1.first_column , 'Lexico','XpathAscendente', " ");
-			erroresSintacticos.push( erroresSint) ;
+			console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); 
+			var error =  new Error( this._$.first_line ,  this._$.first_column, 'sintactico','xmldesc', yytext);
+			erroresSintacticos.push(error); unirErrores(); 
 		}
 ;
 
