@@ -151,35 +151,7 @@
 
 
 
-    <script src="./codemirror-5.61.1/mode/javascript/javascript.js"> </script>
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script type="text/javascript" src="Scripts/InsertarArchivo.js"></script>
-
-    <script type="text/javascript" src="Scripts/clasesXML/ObjetoNodo.js"></script>
-    <script type="text/javascript" src="Scripts/clasesXML/Atributo.js"></script>
-    <script type="text/javascript" src="Scripts/Errores/Error.js"></script>
-    <script type="text/javascript" src="./Scripts/Gramaticas/xml/gramarxml.js"></script>
-    <script type="text/javascript" src="./Scripts/Gramaticas/xpath/gramaticaxpath.js"></script>
-    <script type="text/javascript" src="./Scripts/Gramaticas/xpath/gramaticaXpathDesc.js"></script>
-    <script type="text/javascript" src="./Scripts/ClasesXpath/Arroba.js"></script>
-    <script type="text/javascript" src="./Scripts/ClasesXpath/Dato.js"></script>
-    <script type="text/javascript" src="./Scripts/ClasesXpath/diagonalSimpleS.js"></script>
-    <script type="text/javascript" src="./Scripts/ClasesXpath/diagonalDobleC.js"></script>
-    <script type="text/javascript" src="./Scripts/ClasesXpath/Funcion.js"></script>
-    <script type="text/javascript" src="./Scripts/ClasesXpath/IdCompuesto.js"></script>
-    <script type="text/javascript" src="./Scripts/ClasesXpath/IdSimple.js"></script>
-    <script type="text/javascript" src="./Scripts/ClasesXpath/Metodo.js"></script>
-    <script type="text/javascript" src="./Scripts/ClasesXpath/OperacionAritmetica.js"></script>
-    <script type="text/javascript" src="./Scripts/ClasesXpath/OperacionLogica.js"></script>
-    <script type="text/javascript" src="./Scripts/ClasesXpath/OperacionRelacional.js"></script>
-    <script type="text/javascript" src="./Scripts/ClasesXpath/Operador.js"></script>
-    <script type="text/javascript" src="./Scripts/ClasesXpath/Predicado.js"></script>
-    <script type="text/javascript" src="./Scripts/ClasesXpath/SimbolosXpath.js"></script>
-    <script type="text/javascript" src="./Scripts/ClasesXpath/TiposXpath.js"></script>
-    <script type="text/javascript" src="./Scripts/Arboles/Regla.js"></script>
-    <script src="./Scripts/Gramaticas/xml/gramarxmldes.js"></script>
-    <script src="./Gramaticas/xml/funcionesParseo.js"></script>
-    <script src="./Scripts/Arboles/Tipo.js"></script>
+    
     <script type="text/javascript">
 
             function analisisAsc(){
@@ -218,17 +190,19 @@
 
             function analisisAscXPATH(){
                 // Recupera el contenido del js especificado para tener acceso a funciones definidas en: define()
-                requirejs(['gramaticaxpath'],
-                    function (gramaticaxpath) {
+                requirejs(['grammarXPATH'],
+                    function (grammarXPATH) {
                         erroresGramar = [];
                         var editorxpath = document.getElementById('consola');
                         var entrada =  editorxpath.value;
                         if (entrada.length >= 0) {
-                            console.log(gramaticaxpath)
-                            var xmlAST = gramaticaxpath.getParser().parse(entrada);
-                            console.log(xmlAST)
-                            //llenarTablaErrores();
-                            //llenarTablaGramatical();
+                            console.log('xpath')
+                            //console.log(grammarXPATH);
+                            var grammarAST = grammarXPATH.getParser().parse(entrada);
+                            console.log(grammarAST);
+                            llenarTablaErrores();
+                            llenarTablaGramatical();
+                            llenarArboles();
                             //document.getElementById('tabSimbolosXML').setAttribute('value',JSON.stringify(xmlAST));
                         } else {
                             alert("EL ARCHIVO DE ENTRADA ESTA VACIO\n");
@@ -245,9 +219,10 @@
                         var entrada =  editorxpath.value;
                         //console.log(entrada);
                         if (entrada.length >= 0) {
-                            var xmldesAST = gramaticaXPATHDesc.getParser(entrada);
+                            var gramdesAST = gramaticaXPATHDesc.getParser(entrada);
                             llenarTablaErrores();
                             llenarTablaGramatical();
+                            llenarArboles();
                         } else {
                             alert("EL ARCHIVO DE ENTRADA ESTA VACIO\n");
                         }
@@ -256,6 +231,40 @@
 
     </script>
 </body>
+
+<script src="./codemirror-5.61.1/mode/javascript/javascript.js"> </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="Scripts/InsertarArchivo.js"></script>
+
+    <script type="text/javascript" src="Scripts/clasesXML/ObjetoNodo.js"></script>
+    <script type="text/javascript" src="Scripts/clasesXML/Atributo.js"></script>
+    <script type="text/javascript" src="Scripts/Errores/Error.js"></script>
+
+    <script src="./Scripts/Gramaticas/xml/gramarxmldes.js"></script>
+    <script type="text/javascript" src="./Scripts/Gramaticas/xml/gramarxml.js"></script>
+    <script type="text/javascript" src="./Scripts/Gramaticas/xpath/gramaticaxpath.js"></script>
+    <script type="text/javascript" src="./Scripts/Gramaticas/xpath/gramaticaXpathDesc.js"></script>
+    
+    <script type="text/javascript" src="./Scripts/clasesXML/ObjetoNodo.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/Arroba.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/Dato.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/diagonalSimpleS.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/diagonalDobleC.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/Funcion.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/IdCompuesto.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/IdSimple.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/Metodo.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/OperacionAritmetica.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/OperacionLogica.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/OperacionRelacional.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/Operador.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/Predicado.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/SimbolosXpath.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/TiposXpath.js"></script>
+    <script type="text/javascript" src="./Scripts/Arboles/Regla.js"></script>
+    <script type="text/javascript" src="./Scripts/clasesXML/ObjetoA.js"></script>
+    <script src="./Gramaticas/xml/funcionesParseo.js"></script>
+    <script src="./Scripts/Arboles/Tipo.js"></script>
 
 </html>
 

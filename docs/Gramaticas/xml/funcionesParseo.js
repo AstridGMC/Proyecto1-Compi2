@@ -1,6 +1,9 @@
 
 var erroresGramar = [];
 var reglas = [];
+var ASTtree='';
+var CSTtree='';
+
 
 var tablaErroresDesc = '';
 var tablaGramatical = '';
@@ -16,7 +19,9 @@ function AnalizarXMLasc() {
 }
 
 function reiniciarArreglos() {
-  erroresGramar = [];
+  erroresGramar[0] = [];
+  erroresGramar[1] = [];
+  erroresGramar[2] = [];
   reglas = [];
 }
 
@@ -29,6 +34,14 @@ class DefError {
     }
     return suma;
   }
+}
+
+function llenarArboles(){
+  var cst = document.getElementById('arbolcst');
+  var ast = document.getElementById('arbolast');
+
+  cst.value = ASTtree;
+  ast.value = CSTtree;
 }
 
 function llenarTablaErrores() {

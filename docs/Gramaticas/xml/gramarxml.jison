@@ -3,12 +3,15 @@
  */
 
 %{	
+	
+
     const {ObjetoNodo} = require("./Scripts/clasesXML/ObjetoNodo.js");
 	const {Atributo} = require("./Scripts/clasesXML/Atributo.js");
 	const Error = require('./Scripts/Errores/Error.js');
 	var erroresLexicos = [];
 	var variables=[];
 	var erroresSintacticos = [];
+	var errorSemantico = [];
 %}
 /* DefINIción Léxica */
 %lex
@@ -66,6 +69,14 @@
 /lex
 
 %{	
+
+	define('grammarXMLAsc',function () {
+			return {
+				getParser: function () {
+					return gramarxml;
+				}
+			};
+		});
 	
 	var AUXid=0;
 		
@@ -104,11 +115,11 @@
 
 %% /* Definición de la gramática */
 
-S : XML_GRAMAR EOF 	{ $$ = $1; unirErrores();   return $$; }
+S : XML_GRAMAR EOF 	{ $$ = $1; unirErrores(); return $$; }
 	| error { 
 			console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); 
 			var error =  new Error( this._$.first_line ,  this._$.first_column, 'sintactico','xmldesc', yytext);
-			erroresSintacticos.push(error); unirErrores(); 
+			erroresSintacticos.push(error); ; 
 			}
 ;
 
@@ -131,7 +142,7 @@ FORMAT
 ELEMENTOS :   
 	ELEMENTOS  ELEMENTO 	{ $1.push($2); $$ = $1;}
 	| ELEMENTO				{ $$ = [$1]; } 
-	| error { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
+	| error { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); erroresSintacticos.push(error); }
 ;
 
 ELEMENTO :  

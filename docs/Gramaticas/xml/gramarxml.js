@@ -84,13 +84,13 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- this.$ = $$[$0-1]; unirErrores();   return this.$; 
+ this.$ = $$[$0-1]; unirErrores(); return this.$; 
 break;
 case 2:
  
 			console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); 
 			var error =  new Error( this._$.first_line ,  this._$.first_column, 'sintactico','xmldesc', yytext);
-			erroresSintacticos.push(error); unirErrores(); 
+			erroresSintacticos.push(error); ; 
 			
 break;
 case 3:
@@ -106,7 +106,7 @@ case 9: case 19: case 22: case 31:
  this.$ = [$$[$0]]; 
 break;
 case 10:
- console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); 
+ console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); erroresSintacticos.push(error); 
 break;
 case 11:
  this.$ = new ObjetoNodo($$[$0-1],'', null,$$[$0],_$[$0-1].first_line, _$[$0-1].first_column); 
@@ -440,13 +440,24 @@ _handle_error:
     return true;
 }};
 	
+	
+
     const {ObjetoNodo} = require("./Scripts/clasesXML/ObjetoNodo.js");
 	const {Atributo} = require("./Scripts/clasesXML/Atributo.js");
 	const Error = require('./Scripts/Errores/Error.js');
 	var erroresLexicos = [];
 	var variables=[];
 	var erroresSintacticos = [];
+	var errorSemantico = [];
 	
+
+	define('grammarXMLAsc',function () {
+			return {
+				getParser: function () {
+					return gramarxml;
+				}
+			};
+		});
 	
 	var AUXid=0;
 		
