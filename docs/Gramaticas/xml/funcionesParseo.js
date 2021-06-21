@@ -3,6 +3,7 @@ var erroresGramar = [];
 var reglas = [];
 var ASTtree='';
 var CSTtree='';
+var reglasxml=[];
 
 
 var tablaErroresDesc = '';
@@ -66,7 +67,7 @@ function reglasgg(){
 }
 
 function llenarTablaGramatical() {
-  var cuerpo = '';
+  var cuerpo = '<h2>REGLAS XPATH</h2>';
   cuerpo = cuerpo + '<h1> Tabla de Simbolos </h1>\n';
   var encabezado = '' +
     '<table class=table table-bordered> ' +
@@ -84,6 +85,23 @@ function llenarTablaGramatical() {
         '</tr> ';
     
   }
+  var encabezado2 = '<br><br> <h2>REGLAS XML</h2>' +
+    '<table class=table table-bordered> ' +
+    '<thead class=thead-dark>' +
+    '<th scope = col > PRODUCCION </ th >' +
+    '<th scope = col> REGLA </ th > ' +
+    '</tr > </thead > <tbody>';
+  cuerpo = cuerpo + encabezado2;
+  for (var i = 0; i < reglasxml.length; i++) {
+   
+    cuerpo = cuerpo +
+      '<tr> ' +
+      '<td> ' + reglasxml[i].getProduccion() + ' </td >\n' +
+      '<td> ' + reglasxml[i].getReglaSemantica() + ' </td >\n' +
+      '</tr> ';
+  
+}
+
   cuerpo = cuerpo + '</tbody>\n</table>\n<br/> \n <br/>';
   var gramatical = document.getElementById('gramaticaltb');
   tablaGramatical = cuerpo;

@@ -5,13 +5,14 @@
 %{	
 	
 
-    const {ObjetoNodo} = require("./Scripts/clasesXML/ObjetoNodo.js");
-	const {Atributo} = require("./Scripts/clasesXML/Atributo.js");
-	const Error = require('./Scripts/Errores/Error.js');
+   // const {ObjetoNodo} = require("./Scripts/clasesXML/ObjetoNodo.js");
+	//const {Atributo} = require("./Scripts/clasesXML/Atributo.js");
+	//const Error = require('./Scripts/Errores/Error.js');
 	var erroresLexicos = [];
 	var variables=[];
 	var erroresSintacticos = [];
 	var errorSemantico = [];
+	var etiquetas=[];
 %}
 /* DefINIción Léxica */
 %lex
@@ -102,6 +103,22 @@
 			console.log('agregando regla'+reglas.length);
 		}
 	}
+
+	function validarEtiqueta(nombre, linea, columna){
+		if(etiquetas[etiquetas.length - 1] == nombre){
+			//console.log(nombre +' == '+ etiquetas[etiquetas.length - 1]);
+			//console.log("iguales");
+			return true;
+		}else{
+			//console.log(nombre +' == '+ etiquetas[etiquetas.length - 1]);
+			console.log("error semantico"+linea + columna);
+			var errorSEM = new Error( linea, columna, 'semantico','xmldesc', nombre);
+			errorSemantico.push( errorSEM) ;
+			console.log(errorSEM);
+			return false;
+		}
+	}
+		
 %}
 
 
